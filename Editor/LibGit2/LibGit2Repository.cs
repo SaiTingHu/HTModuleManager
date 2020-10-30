@@ -100,7 +100,6 @@ namespace HT.ModuleManager
                 finally
                 {
                     EditorUtility.ClearProgressBar();
-                    AssetDatabase.Refresh();
                 }
             }
         }
@@ -149,7 +148,6 @@ namespace HT.ModuleManager
                         finally
                         {
                             EditorUtility.ClearProgressBar();
-                            AssetDatabase.Refresh();
                         }
                     }
                 }
@@ -170,12 +168,12 @@ namespace HT.ModuleManager
             };
 
             CloneOptions cloneOptions = new CloneOptions();
-            cloneOptions.OnProgress += (output) =>
+            cloneOptions.OnProgress = (output) =>
             {
                 EditorUtility.DisplayProgressBar("Clone", output, 0);
                 return true;
             };
-            cloneOptions.OnCheckoutProgress += (path, completedSteps, totalSteps) =>
+            cloneOptions.OnCheckoutProgress = (path, completedSteps, totalSteps) =>
             {
                 EditorUtility.DisplayProgressBar("Checkout", path, (float)completedSteps / totalSteps);
             };

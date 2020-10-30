@@ -108,6 +108,17 @@ namespace HT.ModuleManager
                 }
             }
             GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Pull All", EditorStyles.toolbarButton))
+            {
+                if (EditorUtility.DisplayDialog("Pull All", "Are you sure you want pull all Repositories?", "Yes", "No"))
+                {
+                    for (int i = 0; i < _libGit2.Repositories.Count; i++)
+                    {
+                        _libGit2.Repositories[i].Pull();
+                    }
+                    AssetDatabase.Refresh();
+                }
+            }
             GUILayout.EndHorizontal();
         }
         /// <summary>
@@ -178,11 +189,13 @@ namespace HT.ModuleManager
             if (GUILayout.Button("Clone", "ButtonLeft"))
             {
                 _currentRepository.Clone();
+                AssetDatabase.Refresh();
             }
             GUI.enabled = _currentRepository.IsLocalExist && _currentRepository.IsRemoteExist;
             if (GUILayout.Button("Pull", "ButtonRight"))
             {
                 _currentRepository.Pull();
+                AssetDatabase.Refresh();
             }
             GUI.enabled = true;
             GUILayout.FlexibleSpace();
