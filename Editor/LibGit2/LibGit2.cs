@@ -12,14 +12,13 @@ namespace HT.ModuleManager
     internal sealed class LibGit2 : IDisposable
     {
         /// <summary>
-        /// 用于签名的用户名
+        /// 用户名
         /// </summary>
-        public static string Name = "SaiTingHu";
+        public string UserName = "";
         /// <summary>
-        /// 用于签名的邮箱
+        /// 邮箱
         /// </summary>
-        public static string Email = "987947865@qq.com";
-
+        public string Email = "";
         /// <summary>
         /// 所有仓库
         /// </summary>
@@ -125,6 +124,32 @@ namespace HT.ModuleManager
                 Repositories[i].Dispose();
             }
             Repositories.Clear();
+        }
+        /// <summary>
+        /// 拉取所有仓库
+        /// </summary>
+        public void PullAll()
+        {
+            for (int i = 0; i < Repositories.Count; i++)
+            {
+                Repositories[i].Pull(UserName, Email);
+            }
+        }
+        /// <summary>
+        /// 拉取指定仓库
+        /// </summary>
+        /// <param name="repository">仓库</param>
+        public void Pull(LibGit2Repository repository)
+        {
+            repository.Pull(UserName, Email);
+        }
+        /// <summary>
+        /// 克隆指定仓库
+        /// </summary>
+        /// <param name="repository">仓库</param>
+        public void Clone(LibGit2Repository repository)
+        {
+            repository.Clone();
         }
     }
 }

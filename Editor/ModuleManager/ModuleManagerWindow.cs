@@ -8,12 +8,12 @@ namespace HT.ModuleManager
     /// <summary>
     /// 模块管理器
     /// </summary>
-    internal sealed class ModuleManager : EditorWindow
+    internal sealed class ModuleManagerWindow : EditorWindow
     {
         [MenuItem("HT/Module Manager", priority = 2000)]
         private static void OpenWindow()
         {
-            ModuleManager window = GetWindow<ModuleManager>();
+            ModuleManagerWindow window = GetWindow<ModuleManagerWindow>();
             window.titleContent.text = "Module Manager";
             window.Show();
         }
@@ -34,6 +34,8 @@ namespace HT.ModuleManager
             if (_libGit2 == null)
             {
                 _libGit2 = new LibGit2(GetNativeModulesDefine());
+                _libGit2.UserName = EditorPrefs.GetString(LibGit2PrefsTable.LibGit2_UserName, "");
+                _libGit2.Email = EditorPrefs.GetString(LibGit2PrefsTable.LibGit2_Email, "");
             }
             else
             {
@@ -108,14 +110,15 @@ namespace HT.ModuleManager
                 }
             }
             GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Credentials", EditorStyles.toolbarButton))
+            {
+                CredentialsProviderWindow.OpenWindow(this, SetCredentials);
+            }
             if (GUILayout.Button("Pull All", EditorStyles.toolbarButton))
             {
                 if (EditorUtility.DisplayDialog("Pull All", "Are you sure you want pull all Repositories?", "Yes", "No"))
                 {
-                    for (int i = 0; i < _libGit2.Repositories.Count; i++)
-                    {
-                        _libGit2.Repositories[i].Pull();
-                    }
+                    _libGit2.PullAll();
                     AssetDatabase.Refresh();
                 }
             }
@@ -188,13 +191,13 @@ namespace HT.ModuleManager
             GUI.enabled = !_currentRepository.IsLocalExist && _currentRepository.IsRemoteExist;
             if (GUILayout.Button("Clone", "ButtonLeft"))
             {
-                _currentRepository.Clone();
+                _libGit2.Clone(_currentRepository);
                 AssetDatabase.Refresh();
             }
             GUI.enabled = _currentRepository.IsLocalExist && _currentRepository.IsRemoteExist;
             if (GUILayout.Button("Pull", "ButtonRight"))
             {
-                _currentRepository.Pull();
+                _libGit2.Pull(_currentRepository);
                 AssetDatabase.Refresh();
             }
             GUI.enabled = true;
@@ -248,6 +251,19 @@ namespace HT.ModuleManager
         private bool ModuleIsShow(LibGit2Repository repository)
         {
             return _showModuleType == ModuleType.AllModule ? true : repository.IsLocalExist;
+        }
+        /// <summary>
+        /// 设置凭据
+        /// </summary>
+        /// <param name="userName">用户名</param>
+        /// <param name="email">邮箱</param>
+        private void SetCredentials(string userName, string email)
+        {
+            _libGit2.UserName = userName;
+            _libGit2.Email = email;
+
+            EditorPrefs.SetString(LibGit2PrefsTable.LibGit2_UserName, userName);
+            EditorPrefs.SetString(LibGit2PrefsTable.LibGit2_Email, email);
         }
 
         /// <summary>

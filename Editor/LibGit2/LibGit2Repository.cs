@@ -106,7 +106,9 @@ namespace HT.ModuleManager
         /// <summary>
         /// 拉取
         /// </summary>
-        public void Pull()
+        /// <param name="userName">用户名</param>
+        /// <param name="email">邮箱</param>
+        public void Pull(string userName, string email)
         {
             if (IsLocalExist && IsRemoteExist)
             {
@@ -116,7 +118,7 @@ namespace HT.ModuleManager
                     {
                         try
                         {
-                            MergeResult result = Commands.Pull(repository, new Signature(LibGit2.Name, LibGit2.Email, new DateTimeOffset(DateTime.Now)), GetPullOptions());
+                            MergeResult result = Commands.Pull(repository, GetSignature(userName, email), GetPullOptions());
 
                             if (result.Status == MergeStatus.UpToDate || result.Status == MergeStatus.FastForward || result.Status == MergeStatus.NonFastForward)
                             {
@@ -205,6 +207,16 @@ namespace HT.ModuleManager
             pullOptions.MergeOptions = mergeOptions;
 
             return pullOptions;
+        }
+        /// <summary>
+        /// 生成Signature参数
+        /// </summary>
+        /// <param name="userName">用户名</param>
+        /// <param name="email">邮箱</param>
+        /// <returns>Signature参数</returns>
+        private Signature GetSignature(string userName, string email)
+        {
+            return new Signature(userName, email, new DateTimeOffset(DateTime.Now));
         }
     }
 }
