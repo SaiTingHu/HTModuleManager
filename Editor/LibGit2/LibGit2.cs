@@ -130,6 +130,12 @@ namespace HT.ModuleManager
         /// </summary>
         public void PullAll()
         {
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Email))
+            {
+                LibGit2Utility.LogError("Pull all failed! UserName or Email can not be empty!");
+                return;
+            }
+
             for (int i = 0; i < Repositories.Count; i++)
             {
                 Repositories[i].Pull(UserName, Email);
@@ -141,6 +147,12 @@ namespace HT.ModuleManager
         /// <param name="repository">仓库</param>
         public void Pull(LibGit2Repository repository)
         {
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Email))
+            {
+                LibGit2Utility.LogError("Pull failed! UserName or Email can not be empty!");
+                return;
+            }
+
             repository.Pull(UserName, Email);
         }
         /// <summary>
