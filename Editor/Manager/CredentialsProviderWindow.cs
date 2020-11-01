@@ -28,8 +28,8 @@ namespace HT.ModuleManager
 
         private void OnEnable()
         {
-            _userName = EditorPrefs.GetString(LibGit2PrefsTable.LibGit2_UserName, "");
-            _email = EditorPrefs.GetString(LibGit2PrefsTable.LibGit2_Email, "");
+            _userName = EditorPrefs.GetString(Utility.UserNameKey, "");
+            _email = EditorPrefs.GetString(Utility.EmailKey, "");
         }
 
         private void OnGUI()

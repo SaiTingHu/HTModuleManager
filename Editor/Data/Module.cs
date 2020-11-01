@@ -7,42 +7,42 @@ using UnityEditor;
 namespace HT.ModuleManager
 {
     /// <summary>
-    /// LibGit2仓库
+    /// 模块
     /// </summary>
     [Serializable]
-    internal sealed class LibGit2Repository : IDisposable
+    internal sealed class Module : IDisposable
     {
         /// <summary>
-        /// 仓库名称
+        /// 模块名称
         /// </summary>
         public string Name;
         /// <summary>
-        /// 仓库本地路径
+        /// 模块本地路径
         /// </summary>
         public string Path;
         /// <summary>
-        /// 远端仓库路径
+        /// 模块远端路径
         /// </summary>
         public string RemotePath;
         /// <summary>
-        /// 是否存在本地仓库
+        /// 是否存在本地模块
         /// </summary>
         public bool IsLocalExist;
         /// <summary>
-        /// 是否存在远端仓库
+        /// 是否存在远端模块
         /// </summary>
         public bool IsRemoteExist;
         /// <summary>
-        /// 远端仓库是否为Github
+        /// 模块远端是否为Github
         /// </summary>
         public bool IsGithub;
 
         /// <summary>
-        /// LibGit2仓库
+        /// 模块
         /// </summary>
-        /// <param name="path">仓库的本地路径</param>
-        /// <param name="remotePath">远端仓库路径</param>
-        public LibGit2Repository(string path, string remotePath)
+        /// <param name="path">模块的本地路径</param>
+        /// <param name="remotePath">模块的远端路径</param>
+        public Module(string path, string remotePath)
         {
             Name = path.Substring(path.LastIndexOf("/") + 1);
             Path = path;
@@ -91,11 +91,11 @@ namespace HT.ModuleManager
                 try
                 {
                     string path = Repository.Clone(RemotePath, Path, GetCloneOptions());
-                    LibGit2Utility.LogInfo(string.Format("{0} clone succeed! cloned to path: {1}", Name, path));
+                    Utility.LogInfo(string.Format("{0} clone succeed! cloned to path: {1}", Name, path));
                 }
                 catch (Exception e)
                 {
-                    LibGit2Utility.LogError(string.Format("{0} clone failed! {1}", Name, e.Message));
+                    Utility.LogError(string.Format("{0} clone failed! {1}", Name, e.Message));
                 }
                 finally
                 {
@@ -124,28 +124,28 @@ namespace HT.ModuleManager
                             {
                                 if (result.Commit != null)
                                 {
-                                    LibGit2Utility.LogInfo(string.Format("{0} pull succeed! up to date Commit: {1}", Name, result.Commit.Message));
+                                    Utility.LogInfo(string.Format("{0} pull succeed! up to date Commit: {1}", Name, result.Commit.Message));
                                 }
                                 else
                                 {
-                                    LibGit2Utility.LogInfo(string.Format("{0} pull succeed! repository already up to date!", Name));
+                                    Utility.LogInfo(string.Format("{0} pull succeed! repository already up to date!", Name));
                                 }
                             }
                             else
                             {
                                 if (result.Commit != null)
                                 {
-                                    LibGit2Utility.LogWarning(string.Format("{0} pull succeed! up to date Commit: {1}, but there are some conflicts!", Name, result.Commit.Message));
+                                    Utility.LogWarning(string.Format("{0} pull succeed! up to date Commit: {1}, but there are some conflicts!", Name, result.Commit.Message));
                                 }
                                 else
                                 {
-                                    LibGit2Utility.LogError(string.Format("{0} pull failed! There have been some changes in the repository! please restore or submit first!", Name));
+                                    Utility.LogError(string.Format("{0} pull failed! There have been some changes in the repository! please restore or submit first!", Name));
                                 }
                             }
                         }
                         catch (Exception e)
                         {
-                            LibGit2Utility.LogError(string.Format("{0} pull failed! {1}", Name, e.Message));
+                            Utility.LogError(string.Format("{0} pull failed! {1}", Name, e.Message));
                         }
                         finally
                         {
