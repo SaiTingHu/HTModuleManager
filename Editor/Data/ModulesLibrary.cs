@@ -45,6 +45,22 @@ namespace HT.ModuleManager
                 string[] paths = defines[i].Split('|');
                 CreateNullModule(paths[0], paths[1]);
             }
+
+            if (Repository.IsValid(ProjectPath))
+            {
+                using (Repository repository = new Repository(ProjectPath))
+                {
+                    IEnumerator<Submodule> enumerator = repository.Submodules.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        string path = ProjectPath + "/" + enumerator.Current.Path;
+                        if (!Modules.Exists((repo) => { return repo.Path == path; }))
+                        {
+                            OpenModule(path);
+                        }
+                    }
+                }
+            }
         }
         
         /// <summary>
