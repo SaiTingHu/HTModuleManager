@@ -84,13 +84,16 @@ namespace HT.ModuleManager
         /// <summary>
         /// 克隆
         /// </summary>
-        public void Clone()
+        /// <param name="userName">用户名</param>
+        /// <param name="email">邮箱</param>
+        /// <param name="password">密码</param>
+        public void Clone(string userName, string email, string password)
         {
             if (!IsLocalExist && IsRemoteExist)
             {
                 try
                 {
-                    string path = Repository.Clone(RemotePath, Path, GetCloneOptions());
+                    string path = Repository.Clone(RemotePath, Path, GetCloneOptions(userName, email, password));
                     Utility.LogInfo(string.Format("{0} clone succeed! cloned to path: {1}", Name, path));
                 }
                 catch (Exception e)
@@ -108,7 +111,8 @@ namespace HT.ModuleManager
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="email">邮箱</param>
-        public void Pull(string userName, string email)
+        /// <param name="password">密码</param>
+        public void Pull(string userName, string email, string password)
         {
             if (IsLocalExist && IsRemoteExist)
             {
@@ -118,7 +122,7 @@ namespace HT.ModuleManager
                     {
                         try
                         {
-                            MergeResult result = Commands.Pull(repository, GetSignature(userName, email), GetPullOptions());
+                            MergeResult result = Commands.Pull(repository, GetSignature(userName, email), GetPullOptions(userName, email, password));
 
                             if (result.Status == MergeStatus.UpToDate || result.Status == MergeStatus.FastForward || result.Status == MergeStatus.NonFastForward)
                             {
@@ -155,12 +159,15 @@ namespace HT.ModuleManager
                 }
             }
         }
-        
+
         /// <summary>
         /// 生成Clone参数
         /// </summary>
+        /// <param name="userName">用户名</param>
+        /// <param name="email">邮箱</param>
+        /// <param name="password">密码</param>
         /// <returns>Clone参数</returns>
-        private CloneOptions GetCloneOptions()
+        private CloneOptions GetCloneOptions(string userName, string email, string password)
         {
             FetchOptions fetchOptions = new FetchOptions();
             fetchOptions.OnProgress = (output) =>
@@ -180,20 +187,31 @@ namespace HT.ModuleManager
                 EditorUtility.DisplayProgressBar("Checkout", path, (float)completedSteps / totalSteps);
             };
             cloneOptions.FetchOptions = fetchOptions;
+            cloneOptions.CredentialsProvider = (url, usernameFromUrl, types) =>
+            {
+                return new UsernamePasswordCredentials { Username = userName, Password = password };
+            };
 
             return cloneOptions;
         }
         /// <summary>
         /// 生成Pull参数
         /// </summary>
+        /// <param name="userName">用户名</param>
+        /// <param name="email">邮箱</param>
+        /// <param name="password">密码</param>
         /// <returns>Pull参数</returns>
-        private PullOptions GetPullOptions()
+        private PullOptions GetPullOptions(string userName, string email, string password)
         {
             FetchOptions fetchOptions = new FetchOptions();
             fetchOptions.OnProgress = (output) =>
             {
                 EditorUtility.DisplayProgressBar("Fetch", output, 0);
                 return true;
+            };
+            fetchOptions.CredentialsProvider = (url, usernameFromUrl, types) =>
+            {
+                return new UsernamePasswordCredentials { Username = userName, Password = password };
             };
 
             MergeOptions mergeOptions = new MergeOptions();

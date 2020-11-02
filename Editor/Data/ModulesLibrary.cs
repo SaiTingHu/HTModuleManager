@@ -22,6 +22,10 @@ namespace HT.ModuleManager
         /// </summary>
         public string Email;
         /// <summary>
+        /// 密码
+        /// </summary>
+        public string Password;
+        /// <summary>
         /// 项目路径
         /// </summary>
         public string ProjectPath;
@@ -38,6 +42,7 @@ namespace HT.ModuleManager
         {
             UserName = EditorPrefs.GetString(Utility.UserNameKey, "");
             Email = EditorPrefs.GetString(Utility.EmailKey, "");
+            Password = EditorPrefs.GetString(Utility.PasswordKey, "");
             ProjectPath = Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("/"));
 
             for (int i = 0; i < defines.Length; i++)
@@ -188,7 +193,7 @@ namespace HT.ModuleManager
 
             for (int i = 0; i < Modules.Count; i++)
             {
-                Modules[i].Pull(UserName, Email);
+                Modules[i].Pull(UserName, Email, Password);
             }
         }
         /// <summary>
@@ -203,7 +208,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            module.Pull(UserName, Email);
+            module.Pull(UserName, Email, Password);
         }
         /// <summary>
         /// 克隆指定模块
@@ -211,20 +216,29 @@ namespace HT.ModuleManager
         /// <param name="module">模块</param>
         public void Clone(Module module)
         {
-            module.Clone();
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Email))
+            {
+                Utility.LogError("Pull failed! UserName or Email can not be empty! click the button 'Credentials' in the upper right corner!");
+                return;
+            }
+
+            module.Clone(UserName, Email, Password);
         }
         /// <summary>
         /// 设置凭据
         /// </summary>
         /// <param name="userName">用户名</param>
         /// <param name="email">邮箱</param>
-        public void SetCredentials(string userName, string email)
+        /// <param name="password">密码</param>
+        public void SetCredentials(string userName, string email, string password)
         {
             UserName = userName;
             Email = email;
+            Password = password;
 
             EditorPrefs.SetString(Utility.UserNameKey, userName);
             EditorPrefs.SetString(Utility.EmailKey, email);
+            EditorPrefs.SetString(Utility.PasswordKey, password);
         }
     }
 }

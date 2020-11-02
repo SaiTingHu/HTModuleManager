@@ -18,6 +18,11 @@ namespace HT.ModuleManager
         public static readonly string EmailKey = "HT.ModuleManager.Email";
 
         /// <summary>
+        /// 模块库的密码Key
+        /// </summary>
+        public static readonly string PasswordKey = "HT.ModuleManager.Password";
+
+        /// <summary>
         /// 打印普通日志
         /// </summary>
         /// <param name="content">日志内容</param>
