@@ -100,10 +100,6 @@ namespace HT.ModuleManager
                 {
                     Utility.LogError(string.Format("{0} clone failed! {1}", Name, e.Message));
                 }
-                finally
-                {
-                    EditorUtility.ClearProgressBar();
-                }
             }
         }
         /// <summary>
@@ -150,10 +146,6 @@ namespace HT.ModuleManager
                         catch (Exception e)
                         {
                             Utility.LogError(string.Format("{0} pull failed! {1}", Name, e.Message));
-                        }
-                        finally
-                        {
-                            EditorUtility.ClearProgressBar();
                         }
                     }
                 }

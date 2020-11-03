@@ -183,7 +183,8 @@ namespace HT.ModuleManager
         /// <summary>
         /// 拉取所有模块
         /// </summary>
-        public void PullAll()
+        /// <param name="doneAction">完成后执行</param>
+        public void PullAll(Action doneAction)
         {
             if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Email))
             {
@@ -191,16 +192,24 @@ namespace HT.ModuleManager
                 return;
             }
 
-            for (int i = 0; i < Modules.Count; i++)
+            EditorUtility.DisplayProgressBar("Pull All", "Calculating, please wait......", 0);
+            EditorApplication.delayCall += () =>
             {
-                Modules[i].Pull(UserName, Email, Password);
-            }
+                for (int i = 0; i < Modules.Count; i++)
+                {
+                    Modules[i].Pull(UserName, Email, Password);
+                }
+
+                EditorUtility.ClearProgressBar();
+                doneAction?.Invoke();
+            };
         }
         /// <summary>
         /// 拉取指定模块
         /// </summary>
         /// <param name="module">模块</param>
-        public void Pull(Module module)
+        /// <param name="doneAction">完成后执行</param>
+        public void Pull(Module module, Action doneAction)
         {
             if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Email))
             {
@@ -208,13 +217,21 @@ namespace HT.ModuleManager
                 return;
             }
 
-            module.Pull(UserName, Email, Password);
+            EditorUtility.DisplayProgressBar("Pull", "Calculating, please wait......", 0);
+            EditorApplication.delayCall += () =>
+            {
+                module.Pull(UserName, Email, Password);
+
+                EditorUtility.ClearProgressBar();
+                doneAction?.Invoke();
+            };
         }
         /// <summary>
         /// 克隆指定模块
         /// </summary>
         /// <param name="module">模块</param>
-        public void Clone(Module module)
+        /// <param name="doneAction">完成后执行</param>
+        public void Clone(Module module, Action doneAction)
         {
             if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Email))
             {
@@ -222,7 +239,14 @@ namespace HT.ModuleManager
                 return;
             }
 
-            module.Clone(UserName, Email, Password);
+            EditorUtility.DisplayProgressBar("Clone", "Calculating, please wait......", 0);
+            EditorApplication.delayCall += () =>
+            {
+                module.Clone(UserName, Email, Password);
+
+                EditorUtility.ClearProgressBar();
+                doneAction?.Invoke();
+            };
         }
         /// <summary>
         /// 设置凭据

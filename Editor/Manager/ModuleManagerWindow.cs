@@ -186,11 +186,11 @@ namespace HT.ModuleManager
             }
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Create Module", "ButtonLeft"))
+            if (GUILayout.Button("Create", "ButtonLeft"))
             {
                 _isCreateModule = true;
             }
-            if (GUILayout.Button("Open Module", "ButtonMid"))
+            if (GUILayout.Button("Open", "ButtonMid"))
             {
                 string path = EditorUtility.OpenFolderPanel("Open Module", Application.dataPath, "");
                 if (path != "")
@@ -199,18 +199,17 @@ namespace HT.ModuleManager
                 }
             }
             GUI.enabled = _currentModule != null;
-            if (GUILayout.Button("Remove Module", "ButtonMid"))
+            if (GUILayout.Button("Remove", "ButtonMid"))
             {
                 _modulesLibrary.RemoveModule(_currentModule);
                 _currentModule = null;
             }
             GUI.enabled = true;
-            if (GUILayout.Button("Pull All", "ButtonRight"))
+            if (GUILayout.Button("Update All", "ButtonRight"))
             {
-                if (EditorUtility.DisplayDialog("Pull All", "Are you sure you want to pull all modules?", "Yes", "No"))
+                if (EditorUtility.DisplayDialog("Update All", "Are you sure you want to update all modules?", "Yes", "No"))
                 {
-                    _modulesLibrary.PullAll();
-                    AssetDatabase.Refresh();
+                    _modulesLibrary.PullAll(() => { AssetDatabase.Refresh(); });
                 }
             }
             GUILayout.EndHorizontal();
@@ -249,16 +248,14 @@ namespace HT.ModuleManager
                 Application.OpenURL(_currentModule.RemotePath);
             }
             GUI.enabled = !_currentModule.IsLocalExist && _currentModule.IsRemoteExist;
-            if (GUILayout.Button("Clone", "ButtonLeft"))
+            if (GUILayout.Button("Download", "ButtonLeft"))
             {
-                _modulesLibrary.Clone(_currentModule);
-                AssetDatabase.Refresh();
+                _modulesLibrary.Clone(_currentModule, () => { AssetDatabase.Refresh(); });
             }
             GUI.enabled = _currentModule.IsLocalExist && _currentModule.IsRemoteExist;
-            if (GUILayout.Button("Pull", "ButtonRight"))
+            if (GUILayout.Button("Update", "ButtonRight"))
             {
-                _modulesLibrary.Pull(_currentModule);
-                AssetDatabase.Refresh();
+                _modulesLibrary.Pull(_currentModule, () => { AssetDatabase.Refresh(); });
             }
             GUI.enabled = true;
             GUILayout.FlexibleSpace();
@@ -285,7 +282,7 @@ namespace HT.ModuleManager
 
             if (!_currentModule.IsLocalExist)
             {
-                EditorGUILayout.HelpBox("There is no this repository locally! please clone to local first.", MessageType.Warning);
+                EditorGUILayout.HelpBox("There is no this module locally! please download to local first.", MessageType.Warning);
             }
             
             GUILayout.EndVertical();
