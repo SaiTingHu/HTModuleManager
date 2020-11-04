@@ -20,15 +20,19 @@ namespace HT.ModuleManager
         
         private ModulesLibrary _modulesLibrary;
         private Module _currentModule;
+        private Module _currentEditModule;
         private ModuleType _showModuleType = ModuleType.InProject;
         private bool _isCreateModule;
-        private string _createModuleLocalPath;
-        private string _createModuleRemotePath;
+        private bool _isEditModule;
+        private string _inputModuleLocalPath;
+        private string _inputModuleRemotePath;
         private Texture2D _github;
+        private Texture2D _gitee;
         private GUIContent _moduleGC;
         private GUIContent _downloadedGC;
         private GUIContent _noDownloadedGC;
         private GUIContent _githubGC;
+        private GUIContent _giteeGC;
         private GUIContent _networkGC;
         private Vector2 _scroll;
         
@@ -43,10 +47,13 @@ namespace HT.ModuleManager
                 _modulesLibrary.RefreshState();
             }
             _currentModule = null;
+            _currentEditModule = null;
             _isCreateModule = false;
-            _createModuleLocalPath = "";
-            _createModuleRemotePath = "";
+            _isEditModule = false;
+            _inputModuleLocalPath = "";
+            _inputModuleRemotePath = "";
             _github = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/HTModuleManager/Editor/Texture/Github.png");
+            _gitee = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/HTModuleManager/Editor/Texture/Gitee.png");
             _moduleGC = new GUIContent();
             _moduleGC.image = EditorGUIUtility.IconContent("Folder Icon").image;
             _downloadedGC = new GUIContent();
@@ -55,6 +62,8 @@ namespace HT.ModuleManager
             _noDownloadedGC.image = EditorGUIUtility.IconContent("CollabConflict").image;
             _githubGC = new GUIContent();
             _githubGC.image = _github;
+            _giteeGC = new GUIContent();
+            _giteeGC.image = _gitee;
             _networkGC = new GUIContent();
             _networkGC.image = EditorGUIUtility.IconContent("BuildSettings.Web.Small").image;
         }
@@ -97,11 +106,13 @@ namespace HT.ModuleManager
                 {
                     _showModuleType = ModuleType.AllModule;
                     _currentModule = null;
+                    _currentEditModule = null;
                 });
                 gm.AddItem(new GUIContent("In Project"), _showModuleType == ModuleType.InProject, () =>
                 {
                     _showModuleType = ModuleType.InProject;
                     _currentModule = null;
+                    _currentEditModule = null;
                 });
                 gm.ShowAsContext();
             }
@@ -132,7 +143,14 @@ namespace HT.ModuleManager
                     _moduleGC.text = _modulesLibrary.Modules[i].Name;
                     if (GUILayout.Button(_moduleGC, EditorStyles.label, GUILayout.Height(24)))
                     {
-                        _currentModule = _modulesLibrary.Modules[i];
+                        if (_currentModule == _modulesLibrary.Modules[i])
+                        {
+                            _currentModule = null;
+                        }
+                        else
+                        {
+                            _currentModule = _modulesLibrary.Modules[i];
+                        }
                         GUI.FocusControl(null);
                     }
                     GUI.color = Color.white;
@@ -153,13 +171,13 @@ namespace HT.ModuleManager
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Local", GUILayout.Width(60));
-                _createModuleLocalPath = EditorGUILayout.TextField(_createModuleLocalPath);
+                _inputModuleLocalPath = EditorGUILayout.TextField(_inputModuleLocalPath);
                 if (GUILayout.Button("Browse", "MiniButton", GUILayout.Width(60)))
                 {
                     string path = EditorUtility.OpenFolderPanel("Select Local Path", Application.dataPath, "");
                     if (path != "")
                     {
-                        _createModuleLocalPath = path;
+                        _inputModuleLocalPath = path;
                         GUI.FocusControl(null);
                     }
                 }
@@ -167,13 +185,13 @@ namespace HT.ModuleManager
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Remote", GUILayout.Width(60));
-                _createModuleRemotePath = EditorGUILayout.TextField(_createModuleRemotePath);
+                _inputModuleRemotePath = EditorGUILayout.TextField(_inputModuleRemotePath);
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("Create", "ButtonLeft"))
                 {
-                    _modulesLibrary.CreateNullModule(_createModuleLocalPath, _createModuleRemotePath);
+                    _modulesLibrary.CreateNullModule(_inputModuleLocalPath, _inputModuleRemotePath);
                     _isCreateModule = false;
                 }
                 if (GUILayout.Button("Cancel", "ButtonRight"))
@@ -184,11 +202,66 @@ namespace HT.ModuleManager
 
                 GUILayout.EndVertical();
             }
+            else if (_isEditModule)
+            {
+                if (_currentEditModule == null)
+                {
+                    _isEditModule = false;
+                }
+                else
+                {
+                    GUILayout.BeginVertical("Box");
+
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("Name", GUILayout.Width(60));
+                    GUILayout.Label(_currentEditModule.Name);
+                    GUILayout.EndHorizontal();
+
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("Local", GUILayout.Width(60));
+                    _inputModuleLocalPath = EditorGUILayout.TextField(_inputModuleLocalPath);
+                    if (GUILayout.Button("Browse", "MiniButton", GUILayout.Width(60)))
+                    {
+                        string path = EditorUtility.OpenFolderPanel("Select Local Path", Application.dataPath, "");
+                        if (path != "")
+                        {
+                            _inputModuleLocalPath = path;
+                            GUI.FocusControl(null);
+                        }
+                    }
+                    GUILayout.EndHorizontal();
+
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("Remote", GUILayout.Width(60));
+                    _inputModuleRemotePath = EditorGUILayout.TextField(_inputModuleRemotePath);
+                    GUILayout.EndHorizontal();
+
+                    GUILayout.BeginHorizontal();
+                    if (GUILayout.Button("Edit", "ButtonLeft"))
+                    {
+                        _currentEditModule.Path = _inputModuleLocalPath;
+                        _currentEditModule.RemotePath = _inputModuleRemotePath;
+                        _currentEditModule.RefreshState();
+                        _isEditModule = false;
+                        _currentEditModule = null;
+                    }
+                    if (GUILayout.Button("Cancel", "ButtonRight"))
+                    {
+                        _isEditModule = false;
+                        _currentEditModule = null;
+                    }
+                    GUILayout.EndHorizontal();
+
+                    GUILayout.EndVertical();
+                }
+            }
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Create", "ButtonLeft"))
             {
                 _isCreateModule = true;
+                _isEditModule = false;
+                _currentEditModule = null;
             }
             if (GUILayout.Button("Open", "ButtonMid"))
             {
@@ -199,10 +272,19 @@ namespace HT.ModuleManager
                 }
             }
             GUI.enabled = _currentModule != null;
+            if (GUILayout.Button("Edit", "ButtonMid"))
+            {
+                _isCreateModule = false;
+                _isEditModule = true;
+                _currentEditModule = _currentModule;
+                _inputModuleLocalPath = _currentEditModule.Path;
+                _inputModuleRemotePath = _currentEditModule.RemotePath;
+            }
             if (GUILayout.Button("Remove", "ButtonMid"))
             {
                 _modulesLibrary.RemoveModule(_currentModule);
                 _currentModule = null;
+                _currentEditModule = null;
             }
             GUI.enabled = true;
             if (GUILayout.Button("Update All", "ButtonRight"))
@@ -273,8 +355,9 @@ namespace HT.ModuleManager
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Remote Path", GUILayout.Width(80), GUILayout.Height(20));
-            _githubGC.text = _networkGC.text = _currentModule.RemotePath;
-            GUILayout.Label(_currentModule.IsGithub ? _githubGC : _networkGC, "Badge", GUILayout.Height(20));
+            GUIContent remoteGC = GetRemoteTypeGC(_currentModule);
+            remoteGC.text = _currentModule.RemotePath;
+            GUILayout.Label(remoteGC, "Badge", GUILayout.Height(20));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -309,7 +392,22 @@ namespace HT.ModuleManager
         {
             return _showModuleType == ModuleType.AllModule ? true : module.IsLocalExist;
         }
-        
+        /// <summary>
+        /// 获取模块远端存储库类型对应的GC
+        /// </summary>
+        /// <param name="module">模块</param>
+        /// <returns>模块GC</returns>
+        private GUIContent GetRemoteTypeGC(Module module)
+        {
+            if (module.RemoteType == RemoteRepositoryType.Network)
+                return _networkGC;
+            if (module.RemoteType == RemoteRepositoryType.Github)
+                return _githubGC;
+            if (module.RemoteType == RemoteRepositoryType.Gitee)
+                return _giteeGC;
+            return _networkGC;
+        }
+
         /// <summary>
         /// 模块类型
         /// </summary>

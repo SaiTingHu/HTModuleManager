@@ -33,9 +33,9 @@ namespace HT.ModuleManager
         /// </summary>
         public bool IsRemoteExist;
         /// <summary>
-        /// 模块远端是否为Github
+        /// 远端存储库类型
         /// </summary>
-        public bool IsGithub;
+        public RemoteRepositoryType RemoteType;
 
         /// <summary>
         /// 模块
@@ -79,7 +79,7 @@ namespace HT.ModuleManager
                 }
             }
             IsRemoteExist = !string.IsNullOrEmpty(RemotePath);
-            IsGithub = string.IsNullOrEmpty(RemotePath) ? false : RemotePath.Contains("github.com");
+            RemoteType = GetRemoteType(RemotePath);
         }
         /// <summary>
         /// 克隆
@@ -228,5 +228,30 @@ namespace HT.ModuleManager
         {
             return new Signature(userName, email, new DateTimeOffset(DateTime.Now));
         }
+        /// <summary>
+        /// 获取存储库类型
+        /// </summary>
+        /// <param name="path">路径</param>
+        /// <returns>存储库类型</returns>
+        private RemoteRepositoryType GetRemoteType(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return RemoteRepositoryType.Network;
+            if (path.Contains("github.com"))
+                return RemoteRepositoryType.Github;
+            if (path.Contains("gitee.com"))
+                return RemoteRepositoryType.Gitee;
+            return RemoteRepositoryType.Network;
+        }
+    }
+
+    /// <summary>
+    /// 远端存储库类型
+    /// </summary>
+    internal enum RemoteRepositoryType
+    {
+        Network,
+        Github,
+        Gitee
     }
 }
