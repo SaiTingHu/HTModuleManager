@@ -1,12 +1,16 @@
 # HTModuleManager
 
-Unity的模块管理器，用于管理项目中的所有存储库。
+Unity的模块管理器，用于管理项目中的所有模块（Git存储库）。
 
 ## 环境
 
 - Unity版本：2018.3.0及以上。
 
 - .NET API版本：4.x。
+
+## 使用教程
+
+- [Unity Module Manager 模块管理器](https://wanderer.blog.csdn.net/article/details/109488065)。
 
 ## 使用方法
 
