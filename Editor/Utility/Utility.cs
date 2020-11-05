@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using LibGit2Sharp;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace HT.ModuleManager
 {
@@ -47,6 +49,21 @@ namespace HT.ModuleManager
         public static void LogError(string content)
         {
             Debug.LogError("<b><color=red>[Module Manager]</color></b> " + content);
+        }
+
+        /// <summary>
+        /// 获取第一个远端路径
+        /// </summary>
+        /// <param name="repository">模块仓库</param>
+        /// <returns>远端路径</returns>
+        public static string GetFirstRemotePath(this Repository repository)
+        {
+            IEnumerator<Remote> enumerator = repository.Network.Remotes.GetEnumerator();
+            if (enumerator.MoveNext())
+            {
+                return enumerator.Current.Url;
+            }
+            return null;
         }
     }
 }

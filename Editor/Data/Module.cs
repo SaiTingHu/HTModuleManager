@@ -1,6 +1,5 @@
 ﻿using LibGit2Sharp;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 
@@ -36,7 +35,7 @@ namespace HT.ModuleManager
         /// 远端存储库类型
         /// </summary>
         public RemoteRepositoryType RemoteType;
-
+        
         /// <summary>
         /// 模块
         /// </summary>
@@ -64,16 +63,15 @@ namespace HT.ModuleManager
         public void RefreshState()
         {
             IsLocalExist = Directory.Exists(Path) && Repository.IsValid(Path);
-            if (IsLocalExist && string.IsNullOrEmpty(RemotePath))
+            if (IsLocalExist)
             {
                 using (Repository repository = new Repository(Path))
                 {
                     if (repository != null)
                     {
-                        IEnumerator<Remote> enumerator = repository.Network.Remotes.GetEnumerator();
-                        if (enumerator.MoveNext())
+                        if (string.IsNullOrEmpty(RemotePath))
                         {
-                            RemotePath = enumerator.Current.Url;
+                            RemotePath = repository.GetFirstRemotePath();
                         }
                     }
                 }
