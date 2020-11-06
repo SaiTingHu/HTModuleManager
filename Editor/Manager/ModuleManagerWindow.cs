@@ -34,6 +34,7 @@ namespace HT.ModuleManager
         private GUIContent _githubGC;
         private GUIContent _giteeGC;
         private GUIContent _networkGC;
+        private GUIContent _helpGC;
         private Vector2 _scroll;
         
         private void OnEnable()
@@ -66,6 +67,9 @@ namespace HT.ModuleManager
             _giteeGC.image = _gitee;
             _networkGC = new GUIContent();
             _networkGC.image = EditorGUIUtility.IconContent("BuildSettings.Web.Small").image;
+            _helpGC = new GUIContent();
+            _helpGC.image = EditorGUIUtility.IconContent("_Help").image;
+            _helpGC.tooltip = "Help";
         }
         private void OnGUI()
         {
@@ -120,6 +124,10 @@ namespace HT.ModuleManager
             if (GUILayout.Button("Credentials", EditorStyles.toolbarButton))
             {
                 CredentialsProviderWindow.OpenWindow(this, _modulesLibrary.SetCredentials);
+            }
+            if (GUILayout.Button(_helpGC, "IconButton"))
+            {
+                Application.OpenURL("https://wanderer.blog.csdn.net/article/details/109488065");
             }
             GUILayout.EndHorizontal();
         }
