@@ -1,19 +1,19 @@
-# HTModuleManager
+ï»¿# HTModuleManager
 
-UnityµÄÄ£¿é¹ÜÀíÆ÷£¬ÓÃÓÚ¹ÜÀíÏîÄ¿ÖĞµÄËùÓĞÄ£¿é£¨Git´æ´¢¿â£©¡£
+Unityçš„æ¨¡å—ç®¡ç†å™¨ï¼Œç”¨äºç®¡ç†é¡¹ç›®ä¸­çš„æ‰€æœ‰æ¨¡å—ï¼ˆGitå­˜å‚¨åº“ï¼‰ã€‚
 
-## »·¾³
+## ç¯å¢ƒ
 
-- Unity°æ±¾£º2018.4.0¼°ÒÔÉÏ¡£
+- Unityç‰ˆæœ¬ï¼š2018.4.0åŠä»¥ä¸Šã€‚
 
-- .NET API°æ±¾£º4.x¡£
+- .NET APIç‰ˆæœ¬ï¼š4.xã€‚
 
-## Ê¹ÓÃ½Ì³Ì
+## ä½¿ç”¨æ•™ç¨‹
 
-- [Unity Module Manager Ä£¿é¹ÜÀíÆ÷](https://wanderer.blog.csdn.net/article/details/109488065)¡£
+- [Unity Module Manager æ¨¡å—ç®¡ç†å™¨](https://wanderer.blog.csdn.net/article/details/109488065)ã€‚
 
-## Ê¹ÓÃ·½·¨
+## ä½¿ç”¨æ–¹æ³•
 
-- 1.À­È¡±¾Ä£¿éµ½ÏîÄ¿ÖĞµÄAssetsÎÄ¼ş¼ĞÏÂ£¨Assets/HTModuleManager/£©£¬»òÒÔÌí¼Ó×ÓÄ£¿éµÄĞÎÊ½¡£
+- 1.æ‹‰å–æœ¬æ¨¡å—åˆ°é¡¹ç›®ä¸­çš„Assetsæ–‡ä»¶å¤¹ä¸‹ï¼ˆAssets/HTModuleManager/ï¼‰ï¼Œæˆ–ä»¥æ·»åŠ å­æ¨¡å—çš„å½¢å¼ã€‚
 
-- 2.Ñ¡Ôñ²Ëµ¥ HT -> Module Manager£¬´ò¿ªÄ£¿é¹ÜÀí½çÃæ¡£
+- 2.é€‰æ‹©èœå• HT -> Module Managerï¼Œæ‰“å¼€æ¨¡å—ç®¡ç†ç•Œé¢ã€‚

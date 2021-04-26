@@ -264,5 +264,22 @@ namespace HT.ModuleManager
             EditorPrefs.SetString(Utility.EmailKey, email);
             EditorPrefs.SetString(Utility.PasswordKey, password);
         }
+        /// <summary>
+        /// 获取一个模块的ReadMe文件
+        /// </summary>
+        /// <param name="module">模块</param>
+        /// <returns>ReadMe文件</returns>
+        public TextAsset GetReadMeFile(Module module)
+        {
+            if (module.IsLocalExist)
+            {
+                string readMePath = module.Path.Replace(ProjectPath + "/", "") + "/README.md";
+                return AssetDatabase.LoadAssetAtPath<TextAsset>(readMePath);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

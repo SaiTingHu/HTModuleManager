@@ -21,6 +21,7 @@ namespace HT.ModuleManager
         private ModulesLibrary _modulesLibrary;
         private Module _currentModule;
         private Module _currentEditModule;
+        private TextAsset _currentModuleReadme;
         private ModuleType _showModuleType = ModuleType.InProject;
         private bool _isCreateModule;
         private bool _isEditModule;
@@ -35,8 +36,32 @@ namespace HT.ModuleManager
         private GUIContent _giteeGC;
         private GUIContent _networkGC;
         private GUIContent _helpGC;
-        private Vector2 _scroll;
-        
+        private Vector2 _moduleListScroll;
+        private Vector2 _moduleScroll;
+
+        /// <summary>
+        /// 当前选中的模块
+        /// </summary>
+        private Module CurrentModule
+        {
+            get
+            {
+                return _currentModule;
+            }
+            set
+            {
+                _currentModule = value;
+                if (_currentModule != null)
+                {
+                    _currentModuleReadme = _modulesLibrary.GetReadMeFile(_currentModule);
+                }
+                else
+                {
+                    _currentModuleReadme = null;
+                }
+            }
+        }
+
         private void OnEnable()
         {
             if (_modulesLibrary == null)
@@ -47,7 +72,7 @@ namespace HT.ModuleManager
             {
                 _modulesLibrary.RefreshState();
             }
-            _currentModule = null;
+            CurrentModule = null;
             _currentEditModule = null;
             _isCreateModule = false;
             _isEditModule = false;
@@ -109,13 +134,13 @@ namespace HT.ModuleManager
                 gm.AddItem(new GUIContent("All Module"), _showModuleType == ModuleType.AllModule, () =>
                 {
                     _showModuleType = ModuleType.AllModule;
-                    _currentModule = null;
+                    CurrentModule = null;
                     _currentEditModule = null;
                 });
                 gm.AddItem(new GUIContent("In Project"), _showModuleType == ModuleType.InProject, () =>
                 {
                     _showModuleType = ModuleType.InProject;
-                    _currentModule = null;
+                    CurrentModule = null;
                     _currentEditModule = null;
                 });
                 gm.ShowAsContext();
@@ -138,26 +163,26 @@ namespace HT.ModuleManager
         {
             GUILayout.BeginVertical(GUILayout.Width(300));
 
-            _scroll = GUILayout.BeginScrollView(_scroll);
+            _moduleListScroll = GUILayout.BeginScrollView(_moduleListScroll);
 
             for (int i = 0; i < _modulesLibrary.Modules.Count; i++)
             {
                 if (ModuleIsShow(_modulesLibrary.Modules[i]))
                 {
-                    if (_currentModule == _modulesLibrary.Modules[i]) GUILayout.BeginHorizontal("InsertionMarker");
+                    if (CurrentModule == _modulesLibrary.Modules[i]) GUILayout.BeginHorizontal("InsertionMarker");
                     else GUILayout.BeginHorizontal();
 
                     GUI.color = _modulesLibrary.Modules[i].IsLocalExist ? Color.white : Color.gray;
                     _moduleGC.text = _modulesLibrary.Modules[i].Name;
                     if (GUILayout.Button(_moduleGC, EditorStyles.label, GUILayout.Height(24)))
                     {
-                        if (_currentModule == _modulesLibrary.Modules[i])
+                        if (CurrentModule == _modulesLibrary.Modules[i])
                         {
-                            _currentModule = null;
+                            CurrentModule = null;
                         }
                         else
                         {
-                            _currentModule = _modulesLibrary.Modules[i];
+                            CurrentModule = _modulesLibrary.Modules[i];
                         }
                         GUI.FocusControl(null);
                     }
@@ -279,19 +304,19 @@ namespace HT.ModuleManager
                     _modulesLibrary.OpenModule(path);
                 }
             }
-            GUI.enabled = _currentModule != null;
+            GUI.enabled = CurrentModule != null;
             if (GUILayout.Button("Edit", "ButtonMid"))
             {
                 _isCreateModule = false;
                 _isEditModule = true;
-                _currentEditModule = _currentModule;
+                _currentEditModule = CurrentModule;
                 _inputModuleLocalPath = _currentEditModule.Path;
                 _inputModuleRemotePath = _currentEditModule.RemotePath;
             }
             if (GUILayout.Button("Remove", "ButtonMid"))
             {
-                _modulesLibrary.RemoveModule(_currentModule);
-                _currentModule = null;
+                _modulesLibrary.RemoveModule(CurrentModule);
+                CurrentModule = null;
                 _currentEditModule = null;
             }
             GUI.enabled = true;
@@ -313,39 +338,39 @@ namespace HT.ModuleManager
         /// </summary>
         private void OnModuleGUI()
         {
-            if (_currentModule == null)
+            if (CurrentModule == null)
                 return;
 
             GUILayout.BeginVertical();
             
             GUILayout.BeginHorizontal();
-            GUILayout.Label(_currentModule.Name, "LargeBoldLabel");
+            GUILayout.Label(CurrentModule.Name, "LargeBoldLabel");
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
 
             GUILayout.BeginHorizontal();
-            GUI.enabled = _currentModule.IsLocalExist;
+            GUI.enabled = CurrentModule.IsLocalExist;
             if (GUILayout.Button("Local", "ButtonLeft"))
             {
-                ProcessStartInfo psi = new ProcessStartInfo(_currentModule.Path);
+                ProcessStartInfo psi = new ProcessStartInfo(CurrentModule.Path);
                 Process.Start(psi);
             }
-            GUI.enabled = _currentModule.IsRemoteExist;
+            GUI.enabled = CurrentModule.IsRemoteExist;
             if (GUILayout.Button("Remote", "ButtonRight"))
             {
-                Application.OpenURL(_currentModule.RemotePath);
+                Application.OpenURL(CurrentModule.RemotePath);
             }
-            GUI.enabled = !_currentModule.IsLocalExist && _currentModule.IsRemoteExist;
+            GUI.enabled = !CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist;
             if (GUILayout.Button("Download", "ButtonLeft"))
             {
-                _modulesLibrary.Clone(_currentModule, () => { AssetDatabase.Refresh(); });
+                _modulesLibrary.Clone(CurrentModule, () => { AssetDatabase.Refresh(); });
             }
-            GUI.enabled = _currentModule.IsLocalExist && _currentModule.IsRemoteExist;
+            GUI.enabled = CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist;
             if (GUILayout.Button("Update", "ButtonRight"))
             {
-                _modulesLibrary.Pull(_currentModule, () => { AssetDatabase.Refresh(); });
+                _modulesLibrary.Pull(CurrentModule, () => { AssetDatabase.Refresh(); });
             }
             GUI.enabled = true;
             GUILayout.FlexibleSpace();
@@ -355,7 +380,7 @@ namespace HT.ModuleManager
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Local Path", GUILayout.Width(80), GUILayout.Height(20));
-            GUILayout.Label(_currentModule.Path, "Badge", GUILayout.Height(20));
+            GUILayout.Label(CurrentModule.Path, "Badge", GUILayout.Height(20));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -363,19 +388,35 @@ namespace HT.ModuleManager
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Remote Path", GUILayout.Width(80), GUILayout.Height(20));
-            GUIContent remoteGC = GetRemoteTypeGC(_currentModule);
-            remoteGC.text = _currentModule.RemotePath;
+            GUIContent remoteGC = GetRemoteTypeGC(CurrentModule);
+            remoteGC.text = CurrentModule.RemotePath;
             GUILayout.Label(remoteGC, "Badge", GUILayout.Height(20));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
-            GUILayout.Space(5);
+            GUILayout.Space(10);
 
-            if (!_currentModule.IsLocalExist)
+            if (CurrentModule.IsLocalExist)
+            {
+                if (_currentModuleReadme != null)
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("README.md", "LargeBoldLabel");
+                    GUILayout.FlexibleSpace();
+                    GUILayout.EndHorizontal();
+
+                    GUILayout.Space(10);
+
+                    _moduleScroll = GUILayout.BeginScrollView(_moduleScroll, "HelpBox");
+                    GUILayout.Label(_currentModuleReadme.text);
+                    GUILayout.EndScrollView();
+                }
+            }
+            else
             {
                 EditorGUILayout.HelpBox("There is no this module locally! please download to local first.", MessageType.Warning);
             }
-            
+
             GUILayout.EndVertical();
         }
         
