@@ -208,7 +208,7 @@ namespace HT.ModuleManager
                 if (GUILayout.Button("Browse", "MiniButton", GUILayout.Width(60)))
                 {
                     string path = EditorUtility.OpenFolderPanel("Select Local Path", Application.dataPath, "");
-                    if (path != "")
+                    if (!string.IsNullOrEmpty(path))
                     {
                         _inputModuleLocalPath = path;
                         GUI.FocusControl(null);
@@ -256,7 +256,7 @@ namespace HT.ModuleManager
                     if (GUILayout.Button("Browse", "MiniButton", GUILayout.Width(60)))
                     {
                         string path = EditorUtility.OpenFolderPanel("Select Local Path", Application.dataPath, "");
-                        if (path != "")
+                        if (!string.IsNullOrEmpty(path))
                         {
                             _inputModuleLocalPath = path;
                             GUI.FocusControl(null);
@@ -299,12 +299,12 @@ namespace HT.ModuleManager
             if (GUILayout.Button("Open", "ButtonMid"))
             {
                 string path = EditorUtility.OpenFolderPanel("Open Module", Application.dataPath, "");
-                if (path != "")
+                if (!string.IsNullOrEmpty(path))
                 {
                     _modulesLibrary.OpenModule(path);
                 }
             }
-            GUI.enabled = CurrentModule != null;
+            GUI.enabled = CurrentModule != null && !CurrentModule.IsLocalExist;
             if (GUILayout.Button("Edit", "ButtonMid"))
             {
                 _isCreateModule = false;
@@ -313,6 +313,7 @@ namespace HT.ModuleManager
                 _inputModuleLocalPath = _currentEditModule.Path;
                 _inputModuleRemotePath = _currentEditModule.RemotePath;
             }
+            GUI.enabled = CurrentModule != null;
             if (GUILayout.Button("Remove", "ButtonMid"))
             {
                 _modulesLibrary.RemoveModule(CurrentModule);
