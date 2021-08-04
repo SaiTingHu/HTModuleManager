@@ -16,23 +16,23 @@ namespace HT.ModuleManager
         /// <summary>
         /// 用户名
         /// </summary>
-        public string UserName;
+        public string UserName { get; private set; }
         /// <summary>
         /// 邮箱
         /// </summary>
-        public string Email;
+        public string Email { get; private set; }
         /// <summary>
         /// 密码
         /// </summary>
-        public string Password;
+        public string Password { get; private set; }
         /// <summary>
         /// 项目路径
         /// </summary>
-        public string ProjectPath;
+        public string ProjectPath { get; private set; }
         /// <summary>
         /// 所有模块
         /// </summary>
-        public List<Module> Modules = new List<Module>();
+        public List<Module> Modules { get; private set; } = new List<Module>();
         
         /// <summary>
         /// 模块库
@@ -111,7 +111,7 @@ namespace HT.ModuleManager
 
             if (Directory.Exists(path) && Repository.IsValid(path))
             {
-                Modules.Add(new Module(path, null));
+                Modules.Add(new Module(path));
             }
             else
             {

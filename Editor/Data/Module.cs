@@ -23,25 +23,26 @@ namespace HT.ModuleManager
         /// 模块远端路径
         /// </summary>
         public string RemotePath;
+
         /// <summary>
         /// 是否存在本地模块
         /// </summary>
-        public bool IsLocalExist;
+        public bool IsLocalExist { get; private set; }
         /// <summary>
         /// 是否存在远端模块
         /// </summary>
-        public bool IsRemoteExist;
+        public bool IsRemoteExist { get; private set; }
         /// <summary>
         /// 远端存储库类型
         /// </summary>
-        public RemoteRepositoryType RemoteType;
-        
+        public RemoteRepositoryType RemoteType { get; private set; }
+
         /// <summary>
         /// 模块
         /// </summary>
         /// <param name="path">模块的本地路径</param>
         /// <param name="remotePath">模块的远端路径</param>
-        public Module(string path, string remotePath)
+        public Module(string path, string remotePath = null)
         {
             Name = path.Substring(path.LastIndexOf("/") + 1);
             Path = path;
@@ -49,7 +50,7 @@ namespace HT.ModuleManager
 
             RefreshState();
         }
-
+        
         /// <summary>
         /// 销毁
         /// </summary>
@@ -69,10 +70,7 @@ namespace HT.ModuleManager
                 {
                     if (repository != null)
                     {
-                        if (string.IsNullOrEmpty(RemotePath))
-                        {
-                            RemotePath = repository.GetFirstRemotePath();
-                        }
+                        RemotePath = repository.GetFirstRemotePath();
                     }
                 }
             }
