@@ -6,7 +6,7 @@ HTFrameworkXLua|https://github.com/SaiTingHu/HTFrameworkXLua.git
 HTFrameworkGameComponent|https://github.com/SaiTingHu/HTFrameworkGameComponent.git
 HTFrameworkDemo|https://github.com/SaiTingHu/HTFrameworkDemo.git
 Plugins/HT/HTEditorTool|https://github.com/SaiTingHu/HTEditorTool.git
-Plugins/HT/HTPostProcessing|https://github.com/SaiTingHu/HTPostProcessing.git
-Plugins/HT/HTSpecialEffects|https://github.com/SaiTingHu/HTSpecialEffects.git
+Plugins/HT/PostProcessing|https://github.com/SaiTingHu/PostProcessing.git
+Plugins/HT/SpecialEffects|https://github.com/SaiTingHu/SpecialEffects.git
 Plugins/HT/InfiniteList|https://github.com/SaiTingHu/InfiniteList.git
 Plugins/HT/TextureProcessor|https://github.com/SaiTingHu/TextureProcessor.git
