@@ -10,3 +10,4 @@ Plugins/HT/PostProcessing|https://github.com/SaiTingHu/PostProcessing.git
 Plugins/HT/SpecialEffects|https://github.com/SaiTingHu/SpecialEffects.git
 Plugins/HT/InfiniteList|https://github.com/SaiTingHu/InfiniteList.git
 Plugins/HT/TextureProcessor|https://github.com/SaiTingHu/TextureProcessor.git
+Plugins/HT/TextureShop|https://github.com/SaiTingHu/TextureShop.git
