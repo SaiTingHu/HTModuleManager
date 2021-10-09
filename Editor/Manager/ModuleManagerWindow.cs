@@ -83,9 +83,9 @@ namespace HT.ModuleManager
             _moduleGC = new GUIContent();
             _moduleGC.image = EditorGUIUtility.IconContent("Folder Icon").image;
             _downloadedGC = new GUIContent();
-            _downloadedGC.image = EditorGUIUtility.IconContent("Collab").image;
+            _downloadedGC.image = EditorGUIUtility.IconContent("TestPassed").image;
             _noDownloadedGC = new GUIContent();
-            _noDownloadedGC.image = EditorGUIUtility.IconContent("CollabConflict").image;
+            _noDownloadedGC.image = EditorGUIUtility.IconContent("TestFailed").image;
             _githubGC = new GUIContent();
             _githubGC.image = _github;
             _giteeGC = new GUIContent();
@@ -174,7 +174,7 @@ namespace HT.ModuleManager
 
                     GUI.color = _modulesLibrary.Modules[i].IsLocalExist ? Color.white : Color.gray;
                     _moduleGC.text = _modulesLibrary.Modules[i].Name;
-                    if (GUILayout.Button(_moduleGC, EditorStyles.label, GUILayout.Height(24)))
+                    if (GUILayout.Button(_moduleGC, EditorStyles.label, GUILayout.Width(250), GUILayout.Height(24)))
                     {
                         if (CurrentModule == _modulesLibrary.Modules[i])
                         {

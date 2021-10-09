@@ -16,8 +16,8 @@ namespace HT.ModuleManager
             window._moduleManager = moduleManager;
             window._setCredentialsAction = setCredentialsAction;
             window.position = new Rect(moduleManager.position.center - new Vector2(125, 0), new Vector2(250, 70));
-            window.minSize = new Vector2(250, 70);
-            window.maxSize = new Vector2(250, 70);
+            window.minSize = new Vector2(250, 80);
+            window.maxSize = new Vector2(250, 80);
             window.Show();
         }
 
