@@ -281,5 +281,22 @@ namespace HT.ModuleManager
                 return null;
             }
         }
+        /// <summary>
+        /// 获取一个模块的LICENSE文件
+        /// </summary>
+        /// <param name="module">模块</param>
+        /// <returns>LICENSE文件</returns>
+        public DefaultAsset GetLICENSEFile(Module module)
+        {
+            if (module.IsLocalExist)
+            {
+                string LICENSEPath = module.Path.Replace(ProjectPath + "/", "") + "/LICENSE";
+                return AssetDatabase.LoadAssetAtPath<DefaultAsset>(LICENSEPath);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

@@ -22,16 +22,19 @@ namespace HT.ModuleManager
         private Module _currentModule;
         private Module _currentEditModule;
         private TextAsset _currentModuleReadme;
+        private DefaultAsset _currentModuleLICENSE;
         private ModuleType _showModuleType = ModuleType.InProject;
         private bool _isCreateModule;
         private bool _isEditModule;
         private string _inputModuleLocalPath;
         private string _inputModuleRemotePath;
+        private Texture2D _gitBash;
         private Texture2D _github;
         private Texture2D _gitee;
         private GUIContent _moduleGC;
         private GUIContent _downloadedGC;
         private GUIContent _noDownloadedGC;
+        private GUIContent _gitBashGC;
         private GUIContent _githubGC;
         private GUIContent _giteeGC;
         private GUIContent _networkGC;
@@ -54,10 +57,12 @@ namespace HT.ModuleManager
                 if (_currentModule != null)
                 {
                     _currentModuleReadme = _modulesLibrary.GetReadMeFile(_currentModule);
+                    _currentModuleLICENSE = _modulesLibrary.GetLICENSEFile(_currentModule);
                 }
                 else
                 {
                     _currentModuleReadme = null;
+                    _currentModuleLICENSE = null;
                 }
             }
         }
@@ -78,6 +83,7 @@ namespace HT.ModuleManager
             _isEditModule = false;
             _inputModuleLocalPath = "";
             _inputModuleRemotePath = "";
+            _gitBash = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/HTModuleManager/Editor/Texture/GitBash.png");
             _github = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/HTModuleManager/Editor/Texture/Github.png");
             _gitee = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/HTModuleManager/Editor/Texture/Gitee.png");
             _moduleGC = new GUIContent();
@@ -86,6 +92,9 @@ namespace HT.ModuleManager
             _downloadedGC.image = EditorGUIUtility.IconContent("TestPassed").image;
             _noDownloadedGC = new GUIContent();
             _noDownloadedGC.image = EditorGUIUtility.IconContent("TestFailed").image;
+            _gitBashGC = new GUIContent();
+            _gitBashGC.image = _gitBash;
+            _gitBashGC.text = "Git Bash Here";
             _githubGC = new GUIContent();
             _githubGC.image = _github;
             _giteeGC = new GUIContent();
@@ -146,6 +155,10 @@ namespace HT.ModuleManager
                 gm.ShowAsContext();
             }
             GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Git Bash", EditorStyles.toolbarButton))
+            {
+                GitBashWindow.OpenWindow(this);
+            }
             if (GUILayout.Button("Credentials", EditorStyles.toolbarButton))
             {
                 CredentialsProviderWindow.OpenWindow(this, _modulesLibrary.SetCredentials);
@@ -321,6 +334,7 @@ namespace HT.ModuleManager
                 _currentEditModule = null;
             }
             GUI.enabled = true;
+            GUI.backgroundColor = Color.yellow;
             if (GUILayout.Button("Update All", "ButtonRight"))
             {
                 if (EditorUtility.DisplayDialog("Update All", "Are you sure you want to update all modules?", "Yes", "No"))
@@ -328,6 +342,7 @@ namespace HT.ModuleManager
                     _modulesLibrary.PullAll(() => { AssetDatabase.Refresh(); });
                 }
             }
+            GUI.backgroundColor = Color.white;
             GUILayout.EndHorizontal();
 
             GUILayout.Space(5);
@@ -373,7 +388,33 @@ namespace HT.ModuleManager
             {
                 _modulesLibrary.Pull(CurrentModule, () => { AssetDatabase.Refresh(); });
             }
+            GUI.backgroundColor = Color.green;
+            if (GUILayout.Button(_gitBashGC))
+            {
+                string gitBashPath = EditorPrefs.GetString(Utility.GitBashPath, "");
+                if (string.IsNullOrEmpty(gitBashPath) || !File.Exists(gitBashPath))
+                {
+                    Utility.LogError("Open GitBash failed! please set the GitBash.exe path!");
+                    GitBashWindow.OpenWindow(this);
+                }
+                else
+                {
+                    Process process = new Process();
+                    process.StartInfo = new ProcessStartInfo(gitBashPath, "\"--cd=" + CurrentModule.Path + "\"");
+                    process.Start();
+                }
+            }
+            GUI.backgroundColor = Color.white;
             GUI.enabled = true;
+            if (_currentModuleLICENSE != null)
+            {
+                GUI.backgroundColor = Color.yellow;
+                if (GUILayout.Button("LICENSE"))
+                {
+                    EditorGUIUtility.PingObject(_currentModuleLICENSE);
+                }
+                GUI.backgroundColor = Color.white;
+            }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 

@@ -10,6 +10,11 @@ namespace HT.ModuleManager
     public static class Utility
     {
         /// <summary>
+        /// GitBashPath
+        /// </summary>
+        public static readonly string GitBashPath = "HT.ModuleManager.GitBashPath";
+
+        /// <summary>
         /// 模块库的用户名Key
         /// </summary>
         public static readonly string UserNameKey = "HT.ModuleManager.UserName";
