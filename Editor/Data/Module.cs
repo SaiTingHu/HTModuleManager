@@ -25,6 +25,10 @@ namespace HT.ModuleManager
         public string RemotePath;
 
         /// <summary>
+        /// 当前的活动分支名称
+        /// </summary>
+        public string BranchName { get; private set; }
+        /// <summary>
         /// 是否存在本地模块
         /// </summary>
         public bool IsLocalExist { get; private set; }
@@ -36,7 +40,7 @@ namespace HT.ModuleManager
         /// 远端存储库类型
         /// </summary>
         public RemoteRepositoryType RemoteType { get; private set; }
-
+        
         /// <summary>
         /// 模块
         /// </summary>
@@ -63,6 +67,7 @@ namespace HT.ModuleManager
         /// </summary>
         public void RefreshState()
         {
+            BranchName = "<None>";
             IsLocalExist = Directory.Exists(Path) && Repository.IsValid(Path);
             if (IsLocalExist)
             {
@@ -71,6 +76,7 @@ namespace HT.ModuleManager
                     if (repository != null)
                     {
                         RemotePath = repository.GetFirstRemotePath();
+                        BranchName = repository.Head != null ? repository.Head.FriendlyName : "<None>";
                     }
                 }
             }

@@ -122,6 +122,8 @@ namespace HT.ModuleManager
             OnModuleGUI();
 
             GUILayout.EndHorizontal();
+
+            EventHandle();
         }
         private void OnDestroy()
         {
@@ -361,6 +363,10 @@ namespace HT.ModuleManager
             
             GUILayout.BeginHorizontal();
             GUILayout.Label(CurrentModule.Name, "LargeBoldLabel");
+            GUILayout.Space(10);
+            GUI.color = Color.cyan;
+            GUILayout.Label("Branch: [" + CurrentModule.BranchName + "]", "LargeBoldLabel");
+            GUI.color = Color.white;
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -497,6 +503,51 @@ namespace HT.ModuleManager
             if (module.RemoteType == RemoteRepositoryType.Gitee)
                 return _giteeGC;
             return _networkGC;
+        }
+
+        /// <summary>
+        /// 事件处理
+        /// </summary>
+        private void EventHandle()
+        {
+            int startIndex;
+            if (Event.current != null)
+            {
+                switch (Event.current.rawType)
+                {
+                    case EventType.KeyDown:
+                        switch (Event.current.keyCode)
+                        {
+                            case KeyCode.DownArrow:
+                                startIndex = CurrentModule != null ? (_modulesLibrary.Modules.IndexOf(CurrentModule) + 1) : 0;
+                                for (int i = startIndex; i < _modulesLibrary.Modules.Count; i++)
+                                {
+                                    if (ModuleIsShow(_modulesLibrary.Modules[i]))
+                                    {
+                                        CurrentModule = _modulesLibrary.Modules[i];
+                                        GUI.FocusControl(null);
+                                        GUI.changed = true;
+                                        return;
+                                    }
+                                }
+                                break;
+                            case KeyCode.UpArrow:
+                                startIndex = CurrentModule != null ? (_modulesLibrary.Modules.IndexOf(CurrentModule) - 1) : (_modulesLibrary.Modules.Count - 1);
+                                for (int i = startIndex; i >= 0; i--)
+                                {
+                                    if (ModuleIsShow(_modulesLibrary.Modules[i]))
+                                    {
+                                        CurrentModule = _modulesLibrary.Modules[i];
+                                        GUI.FocusControl(null);
+                                        GUI.changed = true;
+                                        return;
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                }
+            }
         }
 
         /// <summary>
