@@ -364,7 +364,7 @@ namespace HT.ModuleManager
             GUILayout.BeginHorizontal();
             GUILayout.Label(CurrentModule.Name, "LargeBoldLabel");
             GUILayout.Space(10);
-            GUI.color = Color.cyan;
+            GUI.color = (CurrentModule.BranchName == "(no branch)" || CurrentModule.BranchName == "<None>") ? Color.red : Color.cyan;
             GUILayout.Label("Branch: [" + CurrentModule.BranchName + "]", "LargeBoldLabel");
             GUI.color = Color.white;
             GUILayout.FlexibleSpace();
