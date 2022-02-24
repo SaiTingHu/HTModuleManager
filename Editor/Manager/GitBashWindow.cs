@@ -14,7 +14,7 @@ namespace HT.ModuleManager
             GitBashWindow window = GetWindow<GitBashWindow>();
             window.titleContent.text = "Git Bash";
             window._moduleManager = moduleManager;
-            window.position = new Rect(moduleManager.position.center - new Vector2(125, 0), new Vector2(250, 50));
+            window.position = new Rect(moduleManager.position.center - new Vector2(125, 25), new Vector2(250, 50));
             window.minSize = new Vector2(250, 50);
             window.maxSize = new Vector2(250, 50);
             window.Show();
