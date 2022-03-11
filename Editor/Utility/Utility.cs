@@ -15,6 +15,11 @@ namespace HT.ModuleManager
         public static readonly string GitBashPath = "HT.ModuleManager.GitBashPath";
 
         /// <summary>
+        /// TortoiseGitPath
+        /// </summary>
+        public static readonly string TortoiseGitPath = "HT.ModuleManager.TortoiseGitPath";
+
+        /// <summary>
         /// 模块库的用户名Key
         /// </summary>
         public static readonly string UserNameKey = "HT.ModuleManager.UserName";

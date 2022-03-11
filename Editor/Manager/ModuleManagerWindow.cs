@@ -41,6 +41,8 @@ namespace HT.ModuleManager
         private GUIContent _helpGC;
         private Vector2 _moduleListScroll;
         private Vector2 _moduleScroll;
+        private string _tortoiseGitPath;
+        private string _gitBashPath;
 
         /// <summary>
         /// 当前选中的模块
@@ -125,6 +127,11 @@ namespace HT.ModuleManager
 
             EventHandle();
         }
+        private void OnFocus()
+        {
+            _tortoiseGitPath = EditorPrefs.GetString(Utility.TortoiseGitPath, "");
+            _gitBashPath = EditorPrefs.GetString(Utility.GitBashPath, "");
+        }
         private void OnDestroy()
         {
             if (_modulesLibrary != null)
@@ -157,6 +164,10 @@ namespace HT.ModuleManager
                 gm.ShowAsContext();
             }
             GUILayout.FlexibleSpace();
+            if (GUILayout.Button("Tortoise Git", EditorStyles.toolbarButton))
+            {
+                TortoiseGitWindow.OpenWindow(this);
+            }
             if (GUILayout.Button("Git Bash", EditorStyles.toolbarButton))
             {
                 GitBashWindow.OpenWindow(this);
@@ -397,8 +408,7 @@ namespace HT.ModuleManager
             GUI.backgroundColor = Color.green;
             if (GUILayout.Button(_gitBashGC))
             {
-                string gitBashPath = EditorPrefs.GetString(Utility.GitBashPath, "");
-                if (string.IsNullOrEmpty(gitBashPath) || !File.Exists(gitBashPath))
+                if (string.IsNullOrEmpty(_gitBashPath) || !File.Exists(_gitBashPath))
                 {
                     Utility.LogError("Open GitBash failed! please set the GitBash.exe path!");
                     GitBashWindow.OpenWindow(this);
@@ -406,7 +416,7 @@ namespace HT.ModuleManager
                 else
                 {
                     Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo(gitBashPath, "\"--cd=" + CurrentModule.Path + "\"");
+                    process.StartInfo = new ProcessStartInfo(_gitBashPath, "\"--cd=" + CurrentModule.Path + "\"");
                     process.Start();
                 }
             }
@@ -441,6 +451,46 @@ namespace HT.ModuleManager
             GUILayout.Label(remoteGC, "Badge", GUILayout.Height(20));
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
+
+            if (CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist && !string.IsNullOrEmpty(_tortoiseGitPath))
+            {
+                GUILayout.Space(10);
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Tortoise Git", GUILayout.Width(80), GUILayout.Height(20));
+                GUI.backgroundColor = Color.green;
+                if (GUILayout.Button("Commit", "ButtonLeft"))
+                {
+                    TortoiseGitHelper.Commit(CurrentModule.Path);
+                }
+                if (GUILayout.Button("Pull", "ButtonMid"))
+                {
+                    TortoiseGitHelper.Pull(CurrentModule.Path);
+                }
+                if (GUILayout.Button("Push", "ButtonRight"))
+                {
+                    TortoiseGitHelper.Push(CurrentModule.Path);
+                }
+                if (GUILayout.Button("Log", "ButtonLeft"))
+                {
+                    TortoiseGitHelper.Log(CurrentModule.Path);
+                }
+                if (GUILayout.Button("Status", "ButtonMid"))
+                {
+                    TortoiseGitHelper.Status(CurrentModule.Path);
+                }
+                if (GUILayout.Button("RevisionGraph", "ButtonRight"))
+                {
+                    TortoiseGitHelper.RevisionGraph(CurrentModule.Path);
+                }
+                if (GUILayout.Button("SwitchBranch"))
+                {
+                    TortoiseGitHelper.SwitchBranch(CurrentModule.Path);
+                }
+                GUI.backgroundColor = Color.white;
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+            }
 
             GUILayout.Space(10);
 
