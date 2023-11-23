@@ -30,35 +30,39 @@ namespace HT.ModuleManager
         /// </summary>
         public string ProjectPath { get; private set; }
         /// <summary>
+        /// 是否为git存储库
+        /// </summary>
+        public bool IsRepository { get; private set; }
+        /// <summary>
         /// 所有模块
         /// </summary>
         public List<Module> Modules { get; private set; } = new List<Module>();
-        
+
         /// <summary>
         /// 模块库
         /// </summary>
         /// <param name="defines">模块的定义</param>
-        public ModulesLibrary(string[] defines)
+        public ModulesLibrary(Dictionary<string, string> defines)
         {
             UserName = EditorPrefs.GetString(Utility.UserNameKey, "");
             Email = EditorPrefs.GetString(Utility.EmailKey, "");
             Password = EditorPrefs.GetString(Utility.PasswordKey, "");
             ProjectPath = Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("/"));
+            IsRepository = Repository.IsValid(ProjectPath);
 
-            for (int i = 0; i < defines.Length; i++)
+            foreach (var item in defines)
             {
-                string[] paths = defines[i].Split('|');
-                CreateNullModule(paths[0], paths[1]);
+                CreateNullModule(item.Key, item.Value);
             }
 
-            if (Repository.IsValid(ProjectPath))
+            if (IsRepository)
             {
                 using (Repository repository = new Repository(ProjectPath))
                 {
                     IEnumerator<Submodule> enumerator = repository.Submodules.GetEnumerator();
                     while (enumerator.MoveNext())
                     {
-                        string path = ProjectPath + "/" + enumerator.Current.Path;
+                        string path = $"{ProjectPath}/{enumerator.Current.Path}";
                         if (!Modules.Exists((repo) => { return repo.Path == path; }))
                         {
                             OpenModule(path);

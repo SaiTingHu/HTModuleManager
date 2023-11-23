@@ -37,6 +37,10 @@ namespace HT.ModuleManager
         /// </summary>
         public bool IsRemoteExist { get; private set; }
         /// <summary>
+        /// 是否为子模块
+        /// </summary>
+        public bool IsSubModule { get; private set; }
+        /// <summary>
         /// 远端存储库类型
         /// </summary>
         public RemoteRepositoryType RemoteType { get; private set; }
@@ -82,6 +86,7 @@ namespace HT.ModuleManager
             }
             IsRemoteExist = !string.IsNullOrEmpty(RemotePath);
             RemoteType = GetRemoteType(RemotePath);
+            IsSubModule = File.Exists($"{Path}/.git");
         }
         /// <summary>
         /// 克隆

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -32,6 +33,8 @@ namespace HT.ModuleManager
         private Texture2D _github;
         private Texture2D _gitee;
         private GUIContent _moduleGC;
+        private GUIContent _noneModuleGC;
+        private GUIContent _subModuleGC;
         private GUIContent _downloadedGC;
         private GUIContent _noDownloadedGC;
         private GUIContent _gitBashGC;
@@ -90,6 +93,11 @@ namespace HT.ModuleManager
             _gitee = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/HTModuleManager/Editor/Texture/Gitee.png");
             _moduleGC = new GUIContent();
             _moduleGC.image = EditorGUIUtility.IconContent("Folder Icon").image;
+            _noneModuleGC = new GUIContent();
+            _noneModuleGC.image = EditorGUIUtility.IconContent("FolderEmpty Icon").image;
+            _subModuleGC = new GUIContent();
+            _subModuleGC.image = EditorGUIUtility.IconContent("PreMatCube").image;
+            _subModuleGC.tooltip = "This is a sub module";
             _downloadedGC = new GUIContent();
             _downloadedGC.image = EditorGUIUtility.IconContent("TestPassed").image;
             _noDownloadedGC = new GUIContent();
@@ -199,8 +207,9 @@ namespace HT.ModuleManager
                     else GUILayout.BeginHorizontal();
 
                     GUI.color = _modulesLibrary.Modules[i].IsLocalExist ? Color.white : Color.gray;
-                    _moduleGC.text = _modulesLibrary.Modules[i].Name;
-                    if (GUILayout.Button(_moduleGC, EditorStyles.label, GUILayout.Width(250), GUILayout.Height(24)))
+                    GUIContent gc = _modulesLibrary.Modules[i].IsLocalExist ? _moduleGC : _noneModuleGC;
+                    gc.text = _modulesLibrary.Modules[i].Name;
+                    if (GUILayout.Button(gc, EditorStyles.label, GUILayout.Width(240), GUILayout.Height(24)))
                     {
                         if (CurrentModule == _modulesLibrary.Modules[i])
                         {
@@ -216,7 +225,12 @@ namespace HT.ModuleManager
 
                     GUILayout.FlexibleSpace();
 
-                    GUILayout.Label(_modulesLibrary.Modules[i].IsLocalExist ? _downloadedGC : _noDownloadedGC);
+                    if (_modulesLibrary.Modules[i].IsSubModule)
+                    {
+                        GUILayout.Label(_subModuleGC, GUILayout.Width(20));
+                    }
+
+                    GUILayout.Label(_modulesLibrary.Modules[i].IsLocalExist ? _downloadedGC : _noDownloadedGC, GUILayout.Width(20));
 
                     GUILayout.EndHorizontal();
                 }
@@ -348,15 +362,28 @@ namespace HT.ModuleManager
             }
             GUI.enabled = true;
             GUI.backgroundColor = Color.yellow;
-            if (GUILayout.Button("Update All", "ButtonRight"))
+            if (GUILayout.Button("Pull All", "ButtonRight"))
             {
-                if (EditorUtility.DisplayDialog("Update All", "Are you sure you want to update all modules?", "Yes", "No"))
+                if (EditorUtility.DisplayDialog("Pull All", "Are you sure you want to Pull all modules?", "Yes", "No"))
                 {
                     _modulesLibrary.PullAll(() => { AssetDatabase.Refresh(); });
                 }
             }
             GUI.backgroundColor = Color.white;
             GUILayout.EndHorizontal();
+
+            if (!string.IsNullOrEmpty(_tortoiseGitPath))
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Label("Tortoise Git", GUILayout.Width(80));
+                GUI.backgroundColor = Color.green;
+                if (GUILayout.Button("Update All SubModule"))
+                {
+                    TortoiseGitHelper.UpdateAllSubModule(_modulesLibrary.ProjectPath);
+                }
+                GUI.backgroundColor = Color.white;
+                GUILayout.EndHorizontal();
+            }
 
             GUILayout.Space(5);
 
@@ -376,7 +403,7 @@ namespace HT.ModuleManager
             GUILayout.Label(CurrentModule.Name, "LargeBoldLabel");
             GUILayout.Space(10);
             GUI.color = (CurrentModule.BranchName == "(no branch)" || CurrentModule.BranchName == "<None>") ? Color.red : Color.cyan;
-            GUILayout.Label("Branch: [" + CurrentModule.BranchName + "]", "LargeBoldLabel");
+            GUILayout.Label($"Branch: [{CurrentModule.BranchName}]", "LargeBoldLabel");
             GUI.color = Color.white;
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -396,12 +423,12 @@ namespace HT.ModuleManager
                 Application.OpenURL(CurrentModule.RemotePath);
             }
             GUI.enabled = !CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist;
-            if (GUILayout.Button("Download", "ButtonLeft"))
+            if (GUILayout.Button("Clone", "ButtonLeft"))
             {
                 _modulesLibrary.Clone(CurrentModule, () => { AssetDatabase.Refresh(); });
             }
             GUI.enabled = CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist;
-            if (GUILayout.Button("Update", "ButtonRight"))
+            if (GUILayout.Button("Pull", "ButtonRight"))
             {
                 _modulesLibrary.Pull(CurrentModule, () => { AssetDatabase.Refresh(); });
             }
@@ -416,7 +443,7 @@ namespace HT.ModuleManager
                 else
                 {
                     Process process = new Process();
-                    process.StartInfo = new ProcessStartInfo(_gitBashPath, "\"--cd=" + CurrentModule.Path + "\"");
+                    process.StartInfo = new ProcessStartInfo(_gitBashPath, $"\"--cd={CurrentModule.Path}\"");
                     process.Start();
                 }
             }
@@ -452,13 +479,24 @@ namespace HT.ModuleManager
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
-            if (CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist && !string.IsNullOrEmpty(_tortoiseGitPath))
+            if (!string.IsNullOrEmpty(_tortoiseGitPath))
             {
                 GUILayout.Space(10);
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Tortoise Git", GUILayout.Width(80), GUILayout.Height(20));
                 GUI.backgroundColor = Color.green;
+                GUI.enabled = !CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist && _modulesLibrary.IsRepository;
+                if (GUILayout.Button("Add To SubModule", "ButtonLeft"))
+                {
+                    TortoiseGitHelper.AddToSubModule(_modulesLibrary.ProjectPath, CurrentModule.Path, CurrentModule.RemotePath);
+                }
+                GUI.enabled = CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist && CurrentModule.IsSubModule;
+                if (GUILayout.Button("Remove SubModule", "ButtonRight"))
+                {
+                    TortoiseGitHelper.RemoveSubModule();
+                }
+                GUI.enabled = CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist;
                 if (GUILayout.Button("Commit", "ButtonLeft"))
                 {
                     TortoiseGitHelper.Commit(CurrentModule.Path);
@@ -479,14 +517,15 @@ namespace HT.ModuleManager
                 {
                     TortoiseGitHelper.Status(CurrentModule.Path);
                 }
-                if (GUILayout.Button("RevisionGraph", "ButtonRight"))
+                if (GUILayout.Button("Revision Graph", "ButtonRight"))
                 {
                     TortoiseGitHelper.RevisionGraph(CurrentModule.Path);
                 }
-                if (GUILayout.Button("SwitchBranch"))
+                if (GUILayout.Button("Switch Branch"))
                 {
                     TortoiseGitHelper.SwitchBranch(CurrentModule.Path);
                 }
+                GUI.enabled = true;
                 GUI.backgroundColor = Color.white;
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
@@ -512,22 +551,51 @@ namespace HT.ModuleManager
             }
             else
             {
-                EditorGUILayout.HelpBox("There is no this module locally! please download to local first.", MessageType.Warning);
+                EditorGUILayout.HelpBox("There is no this module locally! please Clone to local first.", MessageType.Warning);
             }
 
             GUILayout.EndVertical();
         }
-        
+
         /// <summary>
-        /// 获取原生模块的定义
+        /// 获取原生模块、自动引用模块的定义
         /// </summary>
-        private string[] GetNativeModulesDefine()
+        private Dictionary<string, string> GetNativeModulesDefine()
         {
-            string[] modules = File.ReadAllLines(Application.dataPath + "/HTModuleManager/Editor/Manager/NativeModules.txt");
-            for (int i = 0; i < modules.Length; i++)
+            Dictionary<string, string> modules = new Dictionary<string, string>();
+
+            string[] nativeModules = File.ReadAllLines(Application.dataPath + "/HTModuleManager/Editor/Manager/NativeModules.txt");
+            for (int i = 0; i < nativeModules.Length; i++)
             {
-                modules[i] = Application.dataPath + "/" + modules[i];
+                string[] paths = nativeModules[i].Split('|');
+                string local = $"{Application.dataPath}/{paths[0]}";
+                string remote = paths[1];
+                if (modules.ContainsKey(local)) modules[local] = remote;
+                else modules.Add(local, remote);
             }
+
+            string autoIncludePath = EditorPrefs.GetString(Utility.AutoInclusionPath, "");
+            if (!string.IsNullOrEmpty(autoIncludePath) && File.Exists(Application.dataPath + autoIncludePath))
+            {
+                string[] autoModules = File.ReadAllLines(Application.dataPath + autoIncludePath);
+                for (int i = 0; i < autoModules.Length; i++)
+                {
+                    string[] paths = autoModules[i].Split('|');
+                    string local = $"{Application.dataPath}/{paths[0]}";
+                    string remote = paths[1];
+                    string ope = paths[2];
+                    if (ope == "+")
+                    {
+                        if (modules.ContainsKey(local)) modules[local] = remote;
+                        else modules.Add(local, remote);
+                    }
+                    else if (ope == "-")
+                    {
+                        if (modules.ContainsKey(local)) modules.Remove(local);
+                    }
+                }
+            }
+
             return modules;
         }
         /// <summary>

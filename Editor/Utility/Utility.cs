@@ -13,22 +13,22 @@ namespace HT.ModuleManager
         /// GitBashPath
         /// </summary>
         public static readonly string GitBashPath = "HT.ModuleManager.GitBashPath";
-
         /// <summary>
         /// TortoiseGitPath
         /// </summary>
         public static readonly string TortoiseGitPath = "HT.ModuleManager.TortoiseGitPath";
-
+        /// <summary>
+        /// AutoInclusionPath
+        /// </summary>
+        public static readonly string AutoInclusionPath = "HT.ModuleManager.AutoInclusionPath";
         /// <summary>
         /// 模块库的用户名Key
         /// </summary>
         public static readonly string UserNameKey = "HT.ModuleManager.UserName";
-
         /// <summary>
         /// 模块库的邮箱Key
         /// </summary>
         public static readonly string EmailKey = "HT.ModuleManager.Email";
-
         /// <summary>
         /// 模块库的密码Key
         /// </summary>
@@ -42,7 +42,6 @@ namespace HT.ModuleManager
         {
             Debug.Log("<b><color=cyan>[Module Manager]</color></b> " + content);
         }
-
         /// <summary>
         /// 打印警告日志
         /// </summary>
@@ -51,7 +50,6 @@ namespace HT.ModuleManager
         {
             Debug.LogWarning("<b><color=yellow>[Module Manager]</color></b> " + content);
         }
-
         /// <summary>
         /// 打印错误日志
         /// </summary>
@@ -60,7 +58,6 @@ namespace HT.ModuleManager
         {
             Debug.LogError("<b><color=red>[Module Manager]</color></b> " + content);
         }
-
         /// <summary>
         /// 获取第一个远端路径
         /// </summary>
