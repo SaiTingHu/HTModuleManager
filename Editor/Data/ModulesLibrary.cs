@@ -294,8 +294,8 @@ namespace HT.ModuleManager
         {
             if (module.IsLocalExist)
             {
-                string LICENSEPath = module.Path.Replace(ProjectPath + "/", "") + "/LICENSE";
-                return AssetDatabase.LoadAssetAtPath<DefaultAsset>(LICENSEPath);
+                string path = module.Path.Replace(ProjectPath + "/", "") + "/LICENSE";
+                return AssetDatabase.LoadAssetAtPath<DefaultAsset>(path);
             }
             else
             {

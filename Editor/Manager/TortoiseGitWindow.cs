@@ -9,6 +9,9 @@ namespace HT.ModuleManager
     /// </summary>
     internal sealed class TortoiseGitWindow : EditorWindow
     {
+        /// <summary>
+        /// 打开窗口
+        /// </summary>
         public static void OpenWindow(ModuleManagerWindow moduleManager)
         {
             TortoiseGitWindow window = GetWindow<TortoiseGitWindow>();
@@ -20,7 +23,7 @@ namespace HT.ModuleManager
             window.Show();
         }
 
-        private const string _tortoiseGitVersion = "2.14.0.0";
+        private string _tortoiseGitVersion = "2.14.0.0";
         private ModuleManagerWindow _moduleManager;
         private string _tortoiseGitPath;
         private string _autoInclusionPath;

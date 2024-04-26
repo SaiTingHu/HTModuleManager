@@ -9,6 +9,9 @@ namespace HT.ModuleManager
     /// </summary>
     internal sealed class GitBashWindow : EditorWindow
     {
+        /// <summary>
+        /// 打开界面
+        /// </summary>
         public static void OpenWindow(ModuleManagerWindow moduleManager)
         {
             GitBashWindow window = GetWindow<GitBashWindow>();

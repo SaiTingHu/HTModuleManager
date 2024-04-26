@@ -9,6 +9,9 @@ namespace HT.ModuleManager
     /// </summary>
     internal sealed class CredentialsProviderWindow : EditorWindow
     {
+        /// <summary>
+        /// 打开界面
+        /// </summary>
         public static void OpenWindow(ModuleManagerWindow moduleManager, Action<string, string, string> setCredentialsAction)
         {
             CredentialsProviderWindow window = GetWindow<CredentialsProviderWindow>();
