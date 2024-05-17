@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HT.ModuleManager.Markdown;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using UnityEditor;
@@ -24,6 +25,7 @@ namespace HT.ModuleManager
         private Module _currentEditModule;
         private TextAsset _currentModuleReadme;
         private DefaultAsset _currentModuleLICENSE;
+        private MarkdownViewer _currentReadmeViewer;
         private ModuleType _showModuleType = ModuleType.InProject;
         private bool _isCreateModule;
         private bool _isEditModule;
@@ -32,6 +34,7 @@ namespace HT.ModuleManager
         private Texture2D _gitBash;
         private Texture2D _github;
         private Texture2D _gitee;
+        private GUISkin _skin;
         private GUIContent _moduleGC;
         private GUIContent _noneModuleGC;
         private GUIContent _subModuleGC;
@@ -63,11 +66,16 @@ namespace HT.ModuleManager
                 {
                     _currentModuleReadme = _modulesLibrary.GetReadMeFile(_currentModule);
                     _currentModuleLICENSE = _modulesLibrary.GetLICENSEFile(_currentModule);
+                    if (_currentModuleReadme != null)
+                    {
+                        _currentReadmeViewer = new MarkdownViewer(_skin, AssetDatabase.GetAssetPath(_currentModuleReadme), _currentModuleReadme.text, true);
+                    }
                 }
                 else
                 {
                     _currentModuleReadme = null;
                     _currentModuleLICENSE = null;
+                    _currentReadmeViewer = null;
                 }
             }
         }
@@ -82,7 +90,6 @@ namespace HT.ModuleManager
             {
                 _modulesLibrary.RefreshState();
             }
-            CurrentModule = null;
             _currentEditModule = null;
             _isCreateModule = false;
             _isEditModule = false;
@@ -91,6 +98,7 @@ namespace HT.ModuleManager
             _gitBash = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/HTModuleManager/Editor/Texture/GitBash.png");
             _github = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/HTModuleManager/Editor/Texture/Github.png");
             _gitee = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/HTModuleManager/Editor/Texture/Gitee.png");
+            _skin = AssetDatabase.LoadAssetAtPath<GUISkin>("Assets/HTModuleManager/Editor/Markdown/MarkdownSkin.guiskin");
             _moduleGC = new GUIContent();
             _moduleGC.image = EditorGUIUtility.IconContent("Folder Icon").image;
             _noneModuleGC = new GUIContent();
@@ -114,6 +122,8 @@ namespace HT.ModuleManager
             _helpGC = new GUIContent();
             _helpGC.image = EditorGUIUtility.IconContent("_Help").image;
             _helpGC.tooltip = "Help";
+
+            CurrentModule = null;
         }
         private void OnGUI()
         {
@@ -545,7 +555,7 @@ namespace HT.ModuleManager
                     GUILayout.Space(10);
 
                     _moduleScroll = GUILayout.BeginScrollView(_moduleScroll, "HelpBox");
-                    GUILayout.Label(_currentModuleReadme.text);
+                    _currentReadmeViewer.Draw();
                     GUILayout.EndScrollView();
                 }
             }
