@@ -11,6 +11,7 @@ namespace HT.ModuleManager.Markdown
         private Texture2D _texture;
         private bool _isLoad;
         private bool _isLoadFail;
+        private GUIContent _gc;
 
         /// <summary>
         /// 图像路径
@@ -25,6 +26,7 @@ namespace HT.ModuleManager.Markdown
         {
             _isLoad = false;
             _isLoadFail = false;
+            _gc = new GUIContent("", url);
 
             Path = path;
             Url = url;
@@ -43,7 +45,7 @@ namespace HT.ModuleManager.Markdown
             GUILayout.Label(_texture);
             Rect rect = GUILayoutUtility.GetLastRect();
             EditorGUIUtility.AddCursorRect(rect, MouseCursor.Link);
-            if (GUI.Button(rect, "", "Label"))
+            if (GUI.Button(rect, _gc, "Label"))
             {
                 Application.OpenURL(Url);
             }

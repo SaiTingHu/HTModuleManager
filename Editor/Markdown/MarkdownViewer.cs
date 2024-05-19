@@ -10,7 +10,6 @@ namespace HT.ModuleManager.Markdown
         private GUISkin _skin;
         private string _assetPath;
         private string _content;
-        private MarkdownParser _parser;
         private MarkdownDocument _document;
 
         /// <summary>
@@ -25,8 +24,7 @@ namespace HT.ModuleManager.Markdown
             _skin = skin;
             _assetPath = assetPath;
             _content = content;
-            _parser = new MarkdownParser();
-            _document = _parser.Parse(_assetPath, _content, isHideLoadFailImage);
+            _document = MarkdownUtility.Parse(_assetPath, _content, isHideLoadFailImage);
         }
 
         /// <summary>

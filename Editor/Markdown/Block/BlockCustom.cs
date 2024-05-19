@@ -4,22 +4,22 @@ using UnityEngine;
 namespace HT.ModuleManager.Markdown
 {
     /// <summary>
-    /// Markdown文本超链接【[文本超链接](url)】
+    /// Markdown自定义【{Custom}(args)】
     /// </summary>
-    internal class BlockLink : MarkdownBlock
+    internal class BlockCustom : MarkdownBlock
     {
         private GUIContent _gc;
 
         /// <summary>
-        /// 链接
+        /// 参数
         /// </summary>
-        public string Url { get; private set; }
+        public string Args { get; private set; }
 
-        public BlockLink(string text, string url) : base(text)
+        public BlockCustom(string text, string args) : base(text)
         {
-            _gc = new GUIContent(text, url);
+            _gc = new GUIContent(args, "Custom：" + args);
 
-            Url = url;
+            Args = args;
         }
 
         /// <summary>
@@ -28,10 +28,10 @@ namespace HT.ModuleManager.Markdown
         public override void Draw(GUISkin skin)
         {
             Color color = GUI.contentColor;
-            GUI.contentColor = Container.Document.LinkColor;
+            GUI.contentColor = Container.Document.CustomColor;
             if (GUILayout.Button(_gc, "Label"))
             {
-                Application.OpenURL(Url);
+                Container.Document.DoCustomAction(Args);
             }
             Rect rect = GUILayoutUtility.GetLastRect();
             EditorGUIUtility.AddCursorRect(rect, MouseCursor.Link);
