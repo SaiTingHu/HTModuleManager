@@ -527,6 +527,10 @@ namespace HT.ModuleManager
                 {
                     TortoiseGitHelper.Status(CurrentModule.Path);
                 }
+                if (GUILayout.Button("Settings", "ButtonMid"))
+                {
+                    TortoiseGitHelper.Settings(CurrentModule.Path);
+                }
                 if (GUILayout.Button("Revision Graph", "ButtonRight"))
                 {
                     TortoiseGitHelper.RevisionGraph(CurrentModule.Path);
