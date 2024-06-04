@@ -222,7 +222,7 @@ namespace HT.ModuleManager
 
                     GUIContent gc = _modulesLibrary.Modules[i].IsLocalExist ? _moduleGC : _noneModuleGC;
                     gc.text = _modulesLibrary.Modules[i].Name;
-                    if (GUILayout.Button(gc, EditorStyles.label, GUILayout.Width(240), GUILayout.Height(24)))
+                    if (GUILayout.Button(gc, EditorStyles.label, GUILayout.Width(180), GUILayout.Height(24)))
                     {
                         if (CurrentModule == _modulesLibrary.Modules[i])
                         {
@@ -237,12 +237,19 @@ namespace HT.ModuleManager
 
                     GUILayout.FlexibleSpace();
 
-                    if (_modulesLibrary.Modules[i].IsSubModule)
+                    if (!string.IsNullOrEmpty(_modulesLibrary.Modules[i].TagName))
                     {
-                        GUILayout.Label(_subModuleGC, GUILayout.Width(20));
+                        GUI.color = Color.yellow;
+                        GUILayout.Label(_modulesLibrary.Modules[i].TagName, GUILayout.Width(50), GUILayout.Height(24));
+                        GUI.color = Color.white;
                     }
 
-                    GUILayout.Label(_modulesLibrary.Modules[i].IsLocalExist ? _downloadedGC : _noDownloadedGC, GUILayout.Width(20));
+                    if (_modulesLibrary.Modules[i].IsSubModule)
+                    {
+                        GUILayout.Label(_subModuleGC, GUILayout.Width(20), GUILayout.Height(24));
+                    }
+
+                    GUILayout.Label(_modulesLibrary.Modules[i].IsLocalExist ? _downloadedGC : _noDownloadedGC, GUILayout.Width(20), GUILayout.Height(24));
 
                     GUILayout.EndHorizontal();
                 }
@@ -414,6 +421,13 @@ namespace HT.ModuleManager
             GUILayout.BeginHorizontal();
             GUILayout.Label(CurrentModule.Name, "LargeBoldLabel");
             GUILayout.Space(10);
+            if (!string.IsNullOrEmpty(CurrentModule.TagName))
+            {
+                GUI.color = Color.yellow;
+                GUILayout.Label(CurrentModule.TagName, "LargeBoldLabel");
+                GUI.color = Color.white;
+                GUILayout.Space(10);
+            }
             GUI.color = (CurrentModule.BranchName == "(no branch)" || CurrentModule.BranchName == "<None>") ? Color.red : Color.cyan;
             GUILayout.Label($"Branch: [{CurrentModule.BranchName}]", "LargeBoldLabel");
             GUI.color = Color.white;

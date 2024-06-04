@@ -29,6 +29,10 @@ namespace HT.ModuleManager
         /// </summary>
         public string BranchName { get; private set; }
         /// <summary>
+        /// 当前活动分支的Tag
+        /// </summary>
+        public string TagName { get; private set; }
+        /// <summary>
         /// 是否存在本地模块
         /// </summary>
         public bool IsLocalExist { get; private set; }
@@ -72,6 +76,7 @@ namespace HT.ModuleManager
         public void RefreshState()
         {
             BranchName = "<None>";
+            TagName = null;
             IsLocalExist = Directory.Exists(Path) && Repository.IsValid(Path);
             if (IsLocalExist)
             {
@@ -79,9 +84,10 @@ namespace HT.ModuleManager
                 {
                     if (repository != null)
                     {
-                        RemotePath = repository.GetFirstRemotePath();
                         Branch branch = repository.Head;
+                        RemotePath = repository.GetFirstRemotePath();
                         BranchName = branch != null ? branch.FriendlyName : "<None>";
+                        TagName = GetTagName(repository, branch);
                     }
                 }
             }
@@ -250,6 +256,35 @@ namespace HT.ModuleManager
             if (path.Contains("gitee.com"))
                 return RemoteRepositoryType.Gitee;
             return RemoteRepositoryType.Network;
+        }
+        /// <summary>
+        /// 获取分支当前的Tag
+        /// </summary>
+        private string GetTagName(Repository repository, Branch branch)
+        {
+            if (repository == null || branch == null)
+                return null;
+
+            Commit commit = branch.Tip;
+            if (commit.Committer == null && commit.Author == null)
+                return null;
+
+            string tagName = null;
+            DateTime tipTime = commit.Committer != null ? commit.Committer.When.DateTime : commit.Author.When.DateTime;
+            foreach (var tag in repository.Tags)
+            {
+                Commit tagCommit = tag.Target as Commit;
+                if (tagCommit == null || (tagCommit.Committer == null && tagCommit.Author == null))
+                    continue;
+
+                DateTime tagTime = tagCommit.Committer != null ? tagCommit.Committer.When.DateTime : tagCommit.Author.When.DateTime;
+                TimeSpan span = tipTime - tagTime;
+                if (span.TotalMilliseconds > 0)
+                {
+                    tagName = tag.FriendlyName;
+                }
+            }
+            return tagName;
         }
     }
 
