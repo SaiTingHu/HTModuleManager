@@ -44,6 +44,7 @@ namespace HT.ModuleManager
         private GUIContent _githubGC;
         private GUIContent _giteeGC;
         private GUIContent _networkGC;
+        private GUIContent _refreshGC;
         private GUIContent _helpGC;
         private Vector2 _moduleListScroll;
         private Vector2 _moduleScroll;
@@ -119,6 +120,9 @@ namespace HT.ModuleManager
             _giteeGC.image = _gitee;
             _networkGC = new GUIContent();
             _networkGC.image = EditorGUIUtility.IconContent("BuildSettings.Web.Small").image;
+            _refreshGC = new GUIContent();
+            _refreshGC.image = EditorGUIUtility.IconContent("Refresh").image;
+            _refreshGC.tooltip = "Refresh";
             _helpGC = new GUIContent();
             _helpGC.image = EditorGUIUtility.IconContent("_Help").image;
             _helpGC.tooltip = "Help";
@@ -415,23 +419,17 @@ namespace HT.ModuleManager
             GUI.color = (CurrentModule.BranchName == "(no branch)" || CurrentModule.BranchName == "<None>") ? Color.red : Color.cyan;
             GUILayout.Label($"Branch: [{CurrentModule.BranchName}]", "LargeBoldLabel");
             GUI.color = Color.white;
+            GUILayout.Space(5);
+            if (GUILayout.Button(_refreshGC, EditorStyles.iconButton))
+            {
+                CurrentModule.RefreshState();
+            }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
 
             GUILayout.BeginHorizontal();
-            GUI.enabled = CurrentModule.IsLocalExist;
-            if (GUILayout.Button("Local", "ButtonLeft"))
-            {
-                ProcessStartInfo psi = new ProcessStartInfo(CurrentModule.Path);
-                Process.Start(psi);
-            }
-            GUI.enabled = CurrentModule.IsRemoteExist;
-            if (GUILayout.Button("Remote", "ButtonRight"))
-            {
-                Application.OpenURL(CurrentModule.RemotePath);
-            }
             GUI.enabled = !CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist;
             if (GUILayout.Button("Clone", "ButtonLeft"))
             {
@@ -442,7 +440,7 @@ namespace HT.ModuleManager
             {
                 _modulesLibrary.Pull(CurrentModule, () => { AssetDatabase.Refresh(); });
             }
-            GUI.backgroundColor = Color.green;
+            GUI.backgroundColor = Color.yellow;
             if (GUILayout.Button(_gitBashGC))
             {
                 if (string.IsNullOrEmpty(_gitBashPath) || !File.Exists(_gitBashPath))
@@ -475,7 +473,14 @@ namespace HT.ModuleManager
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Local Path", GUILayout.Width(80), GUILayout.Height(20));
-            GUILayout.Label(CurrentModule.Path, "Badge", GUILayout.Height(20));
+            if (EditorGUILayout.LinkButton(CurrentModule.Path, GUILayout.Height(20)))
+            {
+                if (CurrentModule.IsLocalExist)
+                {
+                    ProcessStartInfo psi = new ProcessStartInfo(CurrentModule.Path);
+                    Process.Start(psi);
+                }
+            }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -485,7 +490,13 @@ namespace HT.ModuleManager
             GUILayout.Label("Remote Path", GUILayout.Width(80), GUILayout.Height(20));
             GUIContent remoteGC = GetRemoteTypeGC(CurrentModule);
             remoteGC.text = CurrentModule.RemotePath;
-            GUILayout.Label(remoteGC, "Badge", GUILayout.Height(20));
+            if (EditorGUILayout.LinkButton(remoteGC, GUILayout.Height(20)))
+            {
+                if (CurrentModule.IsRemoteExist)
+                {
+                    Application.OpenURL(CurrentModule.RemotePath);
+                }
+            }
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -506,6 +517,7 @@ namespace HT.ModuleManager
                 {
                     TortoiseGitHelper.RemoveSubModule();
                 }
+                GUILayout.Space(5);
                 GUI.enabled = CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist;
                 if (GUILayout.Button("Commit", "ButtonLeft"))
                 {
@@ -519,6 +531,7 @@ namespace HT.ModuleManager
                 {
                     TortoiseGitHelper.Push(CurrentModule.Path);
                 }
+                GUILayout.Space(5);
                 if (GUILayout.Button("Log", "ButtonLeft"))
                 {
                     TortoiseGitHelper.Log(CurrentModule.Path);
@@ -527,14 +540,11 @@ namespace HT.ModuleManager
                 {
                     TortoiseGitHelper.Status(CurrentModule.Path);
                 }
-                if (GUILayout.Button("Settings", "ButtonMid"))
+                if (GUILayout.Button("Settings", "ButtonRight"))
                 {
                     TortoiseGitHelper.Settings(CurrentModule.Path);
                 }
-                if (GUILayout.Button("Revision Graph", "ButtonRight"))
-                {
-                    TortoiseGitHelper.RevisionGraph(CurrentModule.Path);
-                }
+                GUILayout.Space(5);
                 if (GUILayout.Button("Switch Branch"))
                 {
                     TortoiseGitHelper.SwitchBranch(CurrentModule.Path);

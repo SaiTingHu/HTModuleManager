@@ -246,30 +246,6 @@ namespace HT.ModuleManager
             process.Start();
         }
         /// <summary>
-        /// 查看存储库版本分支图（根据配置路径启动TortoiseGit）
-        /// </summary>
-        /// <param name="repositoryPath">存储库路径</param>
-        public static void RevisionGraph(string repositoryPath)
-        {
-            string path = GetTortoiseGitPath();
-            if (string.IsNullOrEmpty(path) || !File.Exists(path))
-            {
-                Utility.LogError("Open Tortoise Git failed! please set the TortoiseGitProc.exe path in ModuleManager window!");
-                return;
-            }
-
-            if (!Directory.Exists(repositoryPath))
-            {
-                Utility.LogError("Open Tortoise Git failed! the Repository does not exist for path: " + repositoryPath + "!");
-                return;
-            }
-
-            Process process = new Process();
-            process.StartInfo = new ProcessStartInfo(path, "/command:revisiongraph");
-            process.StartInfo.WorkingDirectory = repositoryPath;
-            process.Start();
-        }
-        /// <summary>
         /// 切换存储库分支（根据配置路径启动TortoiseGit）
         /// </summary>
         /// <param name="repositoryPath">存储库路径</param>

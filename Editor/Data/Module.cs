@@ -80,7 +80,8 @@ namespace HT.ModuleManager
                     if (repository != null)
                     {
                         RemotePath = repository.GetFirstRemotePath();
-                        BranchName = repository.Head != null ? repository.Head.FriendlyName : "<None>";
+                        Branch branch = repository.Head;
+                        BranchName = branch != null ? branch.FriendlyName : "<None>";
                     }
                 }
             }
