@@ -4,7 +4,7 @@ using UnityEngine;
 namespace HT.ModuleManager.Markdown
 {
     /// <summary>
-    /// Markdown对象【{Object}(url)】
+    /// Markdown引用对象【{Object}(url)】
     /// </summary>
     internal class BlockObject : MarkdownBlock
     {

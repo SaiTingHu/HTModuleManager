@@ -4,7 +4,7 @@ using UnityEngine;
 namespace HT.ModuleManager.Markdown
 {
     /// <summary>
-    /// Markdown自定义【{Custom}(args)】
+    /// Markdown自定义操作【{Custom}(args)】
     /// </summary>
     internal class BlockCustom : MarkdownBlock
     {

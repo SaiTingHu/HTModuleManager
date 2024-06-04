@@ -220,7 +220,6 @@ namespace HT.ModuleManager
                     if (CurrentModule == _modulesLibrary.Modules[i]) GUILayout.BeginHorizontal("InsertionMarker");
                     else GUILayout.BeginHorizontal();
 
-                    GUI.color = _modulesLibrary.Modules[i].IsLocalExist ? Color.white : Color.gray;
                     GUIContent gc = _modulesLibrary.Modules[i].IsLocalExist ? _moduleGC : _noneModuleGC;
                     gc.text = _modulesLibrary.Modules[i].Name;
                     if (GUILayout.Button(gc, EditorStyles.label, GUILayout.Width(240), GUILayout.Height(24)))
@@ -235,7 +234,6 @@ namespace HT.ModuleManager
                         }
                         GUI.FocusControl(null);
                     }
-                    GUI.color = Color.white;
 
                     GUILayout.FlexibleSpace();
 
@@ -420,7 +418,7 @@ namespace HT.ModuleManager
             GUILayout.Label($"Branch: [{CurrentModule.BranchName}]", "LargeBoldLabel");
             GUI.color = Color.white;
             GUILayout.Space(5);
-            if (GUILayout.Button(_refreshGC, EditorStyles.iconButton))
+            if (GUILayout.Button(_refreshGC))
             {
                 CurrentModule.RefreshState();
             }
