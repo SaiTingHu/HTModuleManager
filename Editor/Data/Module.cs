@@ -270,6 +270,7 @@ namespace HT.ModuleManager
                 return null;
 
             string tagName = null;
+            DateTime recordTime = new DateTime(1000, 1, 1);
             DateTime tipTime = commit.Committer != null ? commit.Committer.When.DateTime : commit.Author.When.DateTime;
             foreach (var tag in repository.Tags)
             {
@@ -278,13 +279,21 @@ namespace HT.ModuleManager
                     continue;
 
                 DateTime tagTime = tagCommit.Committer != null ? tagCommit.Committer.When.DateTime : tagCommit.Author.When.DateTime;
-                TimeSpan span = tipTime - tagTime;
-                if (span.TotalMilliseconds > 0)
+                if (IsMax(tipTime, tagTime) && IsMax(tagTime, recordTime))
                 {
                     tagName = tag.FriendlyName;
+                    recordTime = tagTime;
                 }
             }
             return tagName;
+        }
+        /// <summary>
+        /// 时间a是否大于时间b
+        /// </summary>
+        private bool IsMax(DateTime a, DateTime b)
+        {
+            TimeSpan span = a - b;
+            return span.TotalMilliseconds > 0;
         }
     }
 
