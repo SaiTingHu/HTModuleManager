@@ -288,12 +288,12 @@ namespace HT.ModuleManager
             return tagName;
         }
         /// <summary>
-        /// 时间a是否大于时间b
+        /// 时间a是否大于等于时间b
         /// </summary>
         private bool IsMax(DateTime a, DateTime b)
         {
             TimeSpan span = a - b;
-            return span.TotalMilliseconds > 0;
+            return span.TotalMilliseconds >= 0;
         }
     }
 
