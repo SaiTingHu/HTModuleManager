@@ -222,7 +222,7 @@ namespace HT.ModuleManager
 
                     GUIContent gc = _modulesLibrary.Modules[i].IsLocalExist ? _moduleGC : _noneModuleGC;
                     gc.text = _modulesLibrary.Modules[i].Name;
-                    if (GUILayout.Button(gc, EditorStyles.label, GUILayout.Width(180), GUILayout.Height(24)))
+                    if (GUILayout.Button(gc, EditorStyles.label, GUILayout.MinWidth(180), GUILayout.Height(24)))
                     {
                         if (CurrentModule == _modulesLibrary.Modules[i])
                         {
