@@ -1,8 +1,6 @@
 HTModuleManager|https://github.com/SaiTingHu/HTModuleManager.git
 HTFramework|https://github.com/SaiTingHu/HTFramework.git
 HTFrameworkAI|https://github.com/SaiTingHu/HTFrameworkAI.git
-HTFrameworkILHotfix|https://github.com/SaiTingHu/HTFrameworkILHotfix.git
-HTFrameworkXLua|https://github.com/SaiTingHu/HTFrameworkXLua.git
 HTFrameworkGameComponent|https://github.com/SaiTingHu/HTFrameworkGameComponent.git
 HTFrameworkDemo|https://github.com/SaiTingHu/HTFrameworkDemo.git
 Plugins/HT/HTEditorTool|https://github.com/SaiTingHu/HTEditorTool.git
