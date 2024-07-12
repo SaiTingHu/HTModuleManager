@@ -4,7 +4,7 @@ Unity的模块管理器，用于管理项目中的所有模块（Git存储库）
 
 ## 环境
 
-- Unity版本：2022.3.17。
+- Unity版本：2022.3.34。
 
 - .NET API版本：.NET Framework。
 
