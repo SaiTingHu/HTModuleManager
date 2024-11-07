@@ -40,6 +40,14 @@ namespace HT.ModuleManager.Markdown
             if (_viewer != null)
             {
                 _viewer.Draw();
+
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                if (GUILayout.Button("View in Window"))
+                {
+                    MarkdownWindow.OpenWindow(_target);
+                }
+                GUILayout.EndHorizontal();
             }
             else if (_defaultEditor != null)
             {
