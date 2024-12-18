@@ -12,7 +12,7 @@ namespace HT.ModuleManager
     /// </summary>
     internal sealed class ModuleManagerWindow : EditorWindow
     {
-        [MenuItem("HT/Module Manager", priority = 2000)]
+        [MenuItem("HT/Module Manager &M", priority = 2000)]
         private static void OpenWindow()
         {
             ModuleManagerWindow window = GetWindow<ModuleManagerWindow>();
