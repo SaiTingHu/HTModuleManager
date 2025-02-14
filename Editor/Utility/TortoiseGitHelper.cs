@@ -31,7 +31,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, "/command:about");
             process.Start();
         }
@@ -59,7 +59,7 @@ namespace HT.ModuleManager
             string relativePath = "Assets" + localPath.Replace(Application.dataPath, "");
             relativePath = relativePath.Substring(0, relativePath.LastIndexOf('/'));
             GUIUtility.systemCopyBuffer = remotePath;
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, $"/command:subadd /path:\"{relativePath}\"");
             process.StartInfo.WorkingDirectory = projectPath;
             process.Start();
@@ -96,7 +96,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, $"/command:subupdate /path:\"{projectPath}\\.gitmodules\"");
             process.StartInfo.WorkingDirectory = projectPath;
             process.Start();
@@ -120,7 +120,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, "/command:commit");
             process.StartInfo.WorkingDirectory = repositoryPath;
             process.Start();
@@ -144,7 +144,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, "/command:pull");
             process.StartInfo.WorkingDirectory = repositoryPath;
             process.Start();
@@ -168,7 +168,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, "/command:push");
             process.StartInfo.WorkingDirectory = repositoryPath;
             process.Start();
@@ -192,7 +192,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, "/command:log");
             process.StartInfo.WorkingDirectory = repositoryPath;
             process.Start();
@@ -216,7 +216,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, "/command:repostatus");
             process.StartInfo.WorkingDirectory = repositoryPath;
             process.Start();
@@ -240,7 +240,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, "/command:settings");
             process.StartInfo.WorkingDirectory = repositoryPath;
             process.Start();
@@ -264,7 +264,7 @@ namespace HT.ModuleManager
                 return;
             }
 
-            Process process = new Process();
+            using Process process = new Process();
             process.StartInfo = new ProcessStartInfo(path, "/command:switch");
             process.StartInfo.WorkingDirectory = repositoryPath;
             process.Start();

@@ -45,7 +45,7 @@ namespace HT.ModuleManager.Markdown
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("View in Window"))
                 {
-                    MarkdownWindow.OpenWindow(_target);
+                    MarkdownWindow.OpenWindowOfFile(_target);
                 }
                 GUILayout.EndHorizontal();
             }

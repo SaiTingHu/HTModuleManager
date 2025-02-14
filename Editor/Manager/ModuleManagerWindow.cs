@@ -462,7 +462,7 @@ namespace HT.ModuleManager
                 }
                 else
                 {
-                    Process process = new Process();
+                    using Process process = new Process();
                     process.StartInfo = new ProcessStartInfo(_gitBashPath, $"\"--cd={CurrentModule.Path}\"");
                     process.Start();
                 }
