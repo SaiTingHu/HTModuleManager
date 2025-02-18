@@ -67,14 +67,20 @@ namespace HT.ModuleManager
         /// <summary>
         /// 从项目中移除子模块（根据配置路径启动TortoiseGit）
         /// </summary>
-        public static void RemoveSubModule()
+        /// <param name="projectPath">项目路径</param>
+        /// <param name="localPath">存储库路径（本地）</param>
+        public static void RemoveSubModule(string projectPath, string localPath)
         {
+            string path = localPath.Replace(projectPath + "/", "");
+
             StringBuilder sb = new StringBuilder();
             sb.Append("remove submodule steps:\r\n");
-            sb.Append("1.delete folder: .git/modules/submodule folder;\r\n");
-            sb.Append("2.modify config: .git/config;\r\n");
-            sb.Append("3.delete folder: submodule folder;\r\n");
-            sb.Append("4.modify config: .gitmodules.\r\n");
+            sb.Append($"1.delete folder: <color=yellow>.git/modules/{path}</color>\r\n");
+            sb.Append("2.modify config: <color=yellow>.git/config</color>\r\n");
+            sb.Append($"3.delete folder: <color=yellow>{path}</color>\r\n");
+            sb.Append("4.modify config: <color=yellow>.gitmodules</color>\r\n");
+            sb.Append($"5.clear cache: <color=yellow>git rm --cached {path}</color>\r\n");
+            sb.Append("6.commit: <color=yellow>git commit</color>\r\n");
             Utility.LogInfo(sb.ToString());
         }
         /// <summary>

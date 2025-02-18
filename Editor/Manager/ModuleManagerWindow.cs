@@ -527,7 +527,7 @@ namespace HT.ModuleManager
                 GUI.enabled = CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist && CurrentModule.IsSubModule;
                 if (GUILayout.Button("Remove SubModule", "ButtonRight"))
                 {
-                    TortoiseGitHelper.RemoveSubModule();
+                    TortoiseGitHelper.RemoveSubModule(_modulesLibrary.ProjectPath, CurrentModule.Path);
                 }
                 GUILayout.Space(5);
                 GUI.enabled = CurrentModule.IsLocalExist && CurrentModule.IsRemoteExist;
