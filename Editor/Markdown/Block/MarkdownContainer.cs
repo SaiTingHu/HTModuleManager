@@ -138,6 +138,7 @@ namespace HT.ModuleManager.Markdown
             }
             else if (_containerType == ContainerType.List)
             {
+                GUILayout.Space(25);
                 GUILayout.Label("●");
             }
             else if (_containerType == ContainerType.NoCheckbox)
