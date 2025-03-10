@@ -1,7 +1,7 @@
 HTModuleManager|https://github.com/SaiTingHu/HTModuleManager.git
 HTFramework|https://github.com/SaiTingHu/HTFramework.git
 HTFrameworkAI|https://github.com/SaiTingHu/HTFrameworkAI.git
-HTFrameworkAIButler|https://github.com/SaiTingHu/HTFrameworkAIButler.git
+HTFrameworkAIAgent|https://github.com/SaiTingHu/HTFrameworkAIAgent.git
 HTFrameworkDeployment|https://github.com/SaiTingHu/HTFrameworkDeployment.git
 HTFrameworkGameComponent|https://github.com/SaiTingHu/HTFrameworkGameComponent.git
 HTFrameworkDemo|https://github.com/SaiTingHu/HTFrameworkDemo.git
