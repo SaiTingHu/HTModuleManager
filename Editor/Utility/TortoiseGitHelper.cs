@@ -78,8 +78,8 @@ namespace HT.ModuleManager
             sb.Append($"1.delete folder: <color=yellow>.git/modules/{path}</color>\r\n");
             sb.Append("2.modify config: <color=yellow>.git/config</color>\r\n");
             sb.Append($"3.delete folder: <color=yellow>{path}</color>\r\n");
-            sb.Append("4.modify config: <color=yellow>.gitmodules</color>\r\n");
-            sb.Append($"5.clear cache: <color=yellow>git rm --cached {path}</color>\r\n");
+            sb.Append($"4.clear cache: <color=yellow>git rm --cached {path}</color>\r\n");
+            sb.Append("5.modify config: <color=yellow>.gitmodules</color>\r\n");
             sb.Append("6.commit: <color=yellow>git commit</color>\r\n");
             Utility.LogInfo(sb.ToString());
         }
