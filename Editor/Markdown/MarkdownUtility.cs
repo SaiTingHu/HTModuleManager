@@ -582,6 +582,14 @@ namespace HT.ModuleManager.Markdown
                     args1.RemoveAt(args1.Count - 1);
                     return new BlockObject(AsString(keywordsStart, text, keywordsEnd), args1.AsString());
                 }
+                if (keywordsStart.StartWith('{') && text.Equal("Menu") && keywordsEnd.EndWith('}'))
+                {
+                    keywordsStart.RemoveAt(0);
+                    keywordsEnd.RemoveAt(keywordsEnd.Count - 1);
+                    args1.RemoveAt(0);
+                    args1.RemoveAt(args1.Count - 1);
+                    return new BlockMenu(AsString(keywordsStart, text, keywordsEnd), args1.AsString());
+                }
                 if (keywordsStart.StartWith('{') && text.Equal("Custom") && keywordsEnd.EndWith('}'))
                 {
                     keywordsStart.RemoveAt(0);

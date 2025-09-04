@@ -19,6 +19,10 @@ namespace HT.ModuleManager.Markdown
         /// </summary>
         public readonly Color ObjectColor = new Color(1f, 0.647f, 0, 1);
         /// <summary>
+        /// 菜单块颜色
+        /// </summary>
+        public readonly Color MenuColor = new Color(0f, 1f, 0f, 1f);
+        /// <summary>
         /// 自定义块颜色
         /// </summary>
         public readonly Color CustomColor = new Color(0f, 1f, 1f, 1f);
