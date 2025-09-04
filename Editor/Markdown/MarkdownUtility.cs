@@ -209,6 +209,26 @@ namespace HT.ModuleManager.Markdown
             return new string(total.ToArray());
         }
         /// <summary>
+        /// 字符数组是否由指定的字符组成，且至少包含count个字符
+        /// </summary>
+        /// <param name="cs">字符数组</param>
+        /// <param name="c">指定的字符</param>
+        /// <param name="count">指定的字符数量</param>
+        public static bool IsComposedOf(this List<char> cs, char c, int count)
+        {
+            if (cs.Count < count)
+                return false;
+
+            for (int i = 0; i < cs.Count; i++)
+            {
+                if (cs[i] != c)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        /// <summary>
         /// 是否等于指定字符串
         /// </summary>
         /// <param name="cs">字符数组</param>
@@ -663,6 +683,11 @@ namespace HT.ModuleManager.Markdown
             {
                 type = ContainerType.List;
                 lineChars.RemoveRange(0, 2);
+            }
+            else if (lineChars.IsComposedOf('*', 3) || lineChars.IsComposedOf('-', 3) || lineChars.IsComposedOf('_', 3))
+            {
+                type = ContainerType.DividingLine;
+                lineChars.Clear();
             }
             lineChars.Trim();
             return type;

@@ -81,14 +81,18 @@ namespace HT.ModuleManager.Markdown
         /// </summary>
         public void Draw(GUISkin skin)
         {
-            GUI.skin = skin;
-
             GUILayout.BeginVertical();
             _scroll = GUILayout.BeginScrollView(_scroll);
+
+            GUI.skin = skin;
+
             for (int i = 0; i < _containers.Count; i++)
             {
                 _containers[i].Draw(skin);
             }
+
+            GUI.skin = null;
+
             GUILayout.EndScrollView();
             GUILayout.EndVertical();
         }

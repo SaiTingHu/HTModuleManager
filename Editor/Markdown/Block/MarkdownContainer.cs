@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace HT.ModuleManager.Markdown
@@ -14,7 +15,7 @@ namespace HT.ModuleManager.Markdown
         private Color _contentColor;
         private Color _bgColor;
         private string _style;
-        private GUIStyle _toggleStyle;
+        private GUIContent _copyGC;
 
         /// <summary>
         /// 所属的文档
@@ -80,20 +81,27 @@ namespace HT.ModuleManager.Markdown
                     _contentColor = Color.white;
                     _bgColor = Color.white;
                     _style = null;
-                    _toggleStyle = "Toggle";
                     break;
                 case ContainerType.Checkedbox:
                     _fontSize = 14;
                     _contentColor = Color.white;
                     _bgColor = Color.white;
                     _style = null;
-                    _toggleStyle = "Toggle";
+                    break;
+                case ContainerType.DividingLine:
+                    _fontSize = 14;
+                    _contentColor = Color.white;
+                    _bgColor = Color.black;
+                    _style = null;
                     break;
                 case ContainerType.Fragment:
                     _fontSize = 14;
                     _contentColor = Color.white;
                     _bgColor = Color.black;
                     _style = "Box";
+                    _copyGC = new GUIContent();
+                    _copyGC.image = EditorGUIUtility.IconContent("d_winbtn_win_restore@2x").image;
+                    _copyGC.tooltip = "Copy Code";
                     break;
                 case ContainerType.Default:
                 default:
@@ -125,6 +133,7 @@ namespace HT.ModuleManager.Markdown
             skin.button.fontSize = _fontSize;
             skin.toggle.fontSize = _fontSize;
             skin.label.fontSize = _fontSize;
+            skin.box.fontSize = _fontSize;
             GUI.contentColor = _contentColor;
             GUI.backgroundColor = _bgColor;
             GUI.enabled = true;
@@ -149,6 +158,10 @@ namespace HT.ModuleManager.Markdown
             {
                 GUILayout.Space(25);
             }
+            else if (_containerType == ContainerType.DividingLine)
+            {
+                GUILayout.Label(" ");
+            }
 
             for (int i = 0; i < _block.Count; i++)
             {
@@ -169,15 +182,36 @@ namespace HT.ModuleManager.Markdown
                 Rect rect = GUILayoutUtility.GetLastRect();
                 rect.x = 5;
                 rect.width = 20;
-                GUI.Toggle(rect, false, "", _toggleStyle);
+                EditorGUI.Toggle(rect, false);
             }
             else if (_containerType == ContainerType.Checkedbox)
             {
                 Rect rect = GUILayoutUtility.GetLastRect();
                 rect.x = 5;
                 rect.width = 20;
-                GUI.Toggle(rect, true, "", _toggleStyle);
+                EditorGUI.Toggle(rect, true);
             }
+            else if (_containerType == ContainerType.DividingLine)
+            {
+                Rect rect = GUILayoutUtility.GetLastRect();
+                rect.height = 2;
+                GUI.Box(rect, "");
+            }
+            else if (_containerType == ContainerType.Fragment)
+            {
+                Rect rect = GUILayoutUtility.GetLastRect();
+                rect.x = rect.width - 16;
+                rect.y = rect.y;
+                rect.width = 20;
+                rect.height = 20;
+                if (GUI.Button(rect, _copyGC, EditorStyles.iconButton))
+                {
+                    GUIUtility.systemCopyBuffer = _block.Count > 0 ? _block[0].Text : null;
+                }
+            }
+
+            GUI.contentColor = Color.white;
+            GUI.backgroundColor = Color.white;
         }
     }
 
@@ -231,7 +265,11 @@ namespace HT.ModuleManager.Markdown
         /// </summary>
         Checkedbox,
         /// <summary>
-        /// 片段
+        /// 分隔线 [***、---、___]
+        /// </summary>
+        DividingLine,
+        /// <summary>
+        /// 片段 [```]
         /// </summary>
         Fragment
     }

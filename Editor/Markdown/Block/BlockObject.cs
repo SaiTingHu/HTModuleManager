@@ -33,7 +33,7 @@ namespace HT.ModuleManager.Markdown
         {
             if (_object != null && _icon != null)
             {
-                GUILayout.Label(_icon, GUILayout.Width(16), GUILayout.Height(26));
+                GUILayout.Label(_icon, GUILayout.Width(skin.label.fontSize + 2), GUILayout.Height(skin.label.fontSize + 12));
                 Color color = GUI.contentColor;
                 GUI.contentColor = Container.Document.ObjectColor;
                 if (GUILayout.Button(_gc, "Label"))
@@ -46,7 +46,10 @@ namespace HT.ModuleManager.Markdown
             }
             else
             {
+                Color color = GUI.contentColor;
+                GUI.contentColor = Container.Document.ObjectColor;
                 GUILayout.Label("Missing Object");
+                GUI.contentColor = color;
             }
         }
     }
