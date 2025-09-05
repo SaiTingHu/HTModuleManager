@@ -7,6 +7,7 @@ HTFrameworkGameComponent|https://github.com/SaiTingHu/HTFrameworkGameComponent.g
 HTFrameworkDemo|https://github.com/SaiTingHu/HTFrameworkDemo.git
 Plugins/HT/HTEditorTool|https://github.com/SaiTingHu/HTEditorTool.git
 Plugins/HT/PostProcessing|https://github.com/SaiTingHu/PostProcessing.git
+Plugins/HT/ProtobufNet|https://github.com/SaiTingHu/ProtobufNet.git
 Plugins/HT/SpecialEffects|https://github.com/SaiTingHu/SpecialEffects.git
 Plugins/HT/InfiniteList|https://github.com/SaiTingHu/InfiniteList.git
 Plugins/HT/TextureProcessor|https://github.com/SaiTingHu/TextureProcessor.git
