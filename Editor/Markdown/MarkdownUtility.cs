@@ -407,7 +407,7 @@ namespace HT.ModuleManager.Markdown
             for (int i = 0; i < lineChars.Count; i++)
             {
                 char c = lineChars[i];
-                if (c == '*' || c == '_' || c == '[' || c == ']' || c == '{' || c == '}' || c == '!' || c == '`')
+                if (c == '*' || c == '_' || c == '[' || c == ']' || c == '{' || c == '}' || c == '!' || c == '`' || c == '~')
                 {
                     if (text.Count != 0)
                     {
@@ -630,6 +630,12 @@ namespace HT.ModuleManager.Markdown
                     keywordsStart.RemoveAt(0);
                     keywordsEnd.RemoveAt(keywordsEnd.Count - 1);
                     return new BlockCode(AsString(keywordsStart, text, keywordsEnd));
+                }
+                if (keywordsStart.StartWith("~~") && keywordsEnd.EndWith("~~"))
+                {
+                    keywordsStart.RemoveRange(0, 2);
+                    keywordsEnd.RemoveRange(keywordsEnd.Count - 2, 2);
+                    return new BlockStrikethrough(AsString(keywordsStart, text, keywordsEnd));
                 }
             }
             return new BlockDefault(AsString(keywordsStart, text, keywordsEnd, args1, args2));
