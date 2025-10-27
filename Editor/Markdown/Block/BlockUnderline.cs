@@ -17,9 +17,10 @@ namespace HT.ModuleManager.Markdown
         /// </summary>
         public override void Draw(GUISkin skin)
         {
+            FontStyle fontStyle = skin.label.fontStyle;
             skin.label.fontStyle = FontStyle.Italic;
             GUILayout.Label(Text);
-            skin.label.fontStyle = FontStyle.Normal;
+            skin.label.fontStyle = fontStyle;
         }
     }
 }

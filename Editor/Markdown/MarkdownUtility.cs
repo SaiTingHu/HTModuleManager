@@ -350,12 +350,14 @@ namespace HT.ModuleManager.Markdown
             {
                 MarkdownDocument document = new MarkdownDocument(assetPath, isHideLoadFailImage);
                 StringBuilder builder = new StringBuilder();
+                List<string> tableLines = new List<string>();
                 bool isFragment = false;
                 for (int i = 0; i < lines.Length; i++)
                 {
+                    string line = lines[i].Trim();
                     if (isFragment)
                     {
-                        if (lines[i].StartsWith("```"))
+                        if (line.StartsWith("```"))
                         {
                             isFragment = false;
                             if (builder.Length > 0) builder.Remove(builder.Length - 1, 1);
@@ -364,19 +366,33 @@ namespace HT.ModuleManager.Markdown
                         }
                         else
                         {
-                            builder.Append(lines[i]);
+                            builder.Append(line);
                             builder.Append('\n');
                         }
                     }
                     else
                     {
-                        if (lines[i].StartsWith("```"))
+                        if (line.StartsWith("|") && line.EndsWith("|"))
                         {
+                            tableLines.Add(line);
+                        }
+                        else if (line.StartsWith("```"))
+                        {
+                            if (tableLines.Count > 0)
+                            {
+                                document.AddContainer(ParseTable(tableLines));
+                                tableLines.Clear();
+                            }
                             isFragment = true;
                         }
                         else
                         {
-                            document.AddContainer(ParseLine(lines[i]));
+                            if (tableLines.Count > 0)
+                            {
+                                document.AddContainer(ParseTable(tableLines));
+                                tableLines.Clear();
+                            }
+                            document.AddContainer(ParseLine(line));
                         }
                     }
                 }
@@ -385,6 +401,14 @@ namespace HT.ModuleManager.Markdown
                     if (builder.Length > 0) builder.Remove(builder.Length - 1, 1);
                     document.AddContainer(ParseFragment(builder.ToString()));
                     builder.Clear();
+                }
+                else
+                {
+                    if (tableLines.Count > 0)
+                    {
+                        document.AddContainer(ParseTable(tableLines));
+                        tableLines.Clear();
+                    }
                 }
                 return document;
             }
@@ -531,6 +555,19 @@ namespace HT.ModuleManager.Markdown
 
             MarkdownContainer container = new MarkdownContainer(ContainerType.Fragment);
             container.AddBlock(new BlockDefault(fragment));
+            return container;
+        }
+        /// <summary>
+        /// 解析表格
+        /// </summary>
+        /// <param name="lines">表格所有行</param>
+        private static MarkdownContainer ParseTable(List<string> lines)
+        {
+            if (lines.Count <= 0)
+                return null;
+
+            MarkdownContainer container = new MarkdownContainer(ContainerType.Table);
+            container.AddBlock(new BlockTable(null, lines));
             return container;
         }
         /// <summary>

@@ -24,9 +24,11 @@ namespace HT.ModuleManager.Markdown
             Rect rect = GUILayoutUtility.GetLastRect();
             rect.y += (rect.height * 0.5f - 1);
             rect.height = 2f;
+
+            Color color = GUI.color;
             GUI.color = Color.yellow;
             GUI.Box(rect, "", "WhiteBackground");
-            GUI.color = Color.white;
+            GUI.color = color;
 
             GUI.skin = skin;
         }

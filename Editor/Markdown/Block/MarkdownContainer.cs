@@ -103,6 +103,12 @@ namespace HT.ModuleManager.Markdown
                     _copyGC.image = EditorGUIUtility.IconContent("d_winbtn_win_restore@2x").image;
                     _copyGC.tooltip = "Copy Code";
                     break;
+                case ContainerType.Table:
+                    _fontSize = 14;
+                    _contentColor = Color.white;
+                    _bgColor = Color.white;
+                    _style = "Box";
+                    break;
                 case ContainerType.Default:
                 default:
                     _fontSize = 14;
@@ -138,75 +144,90 @@ namespace HT.ModuleManager.Markdown
             GUI.backgroundColor = _bgColor;
             GUI.enabled = true;
 
-            if (string.IsNullOrEmpty(_style)) GUILayout.BeginHorizontal();
-            else GUILayout.BeginHorizontal(_style);
+            if (_containerType == ContainerType.Table)
+            {
+                if (string.IsNullOrEmpty(_style)) GUILayout.BeginVertical();
+                else GUILayout.BeginVertical(_style);
 
-            if (_containerType == ContainerType.Quote)
-            {
-                GUILayout.Space(10);
-            }
-            else if (_containerType == ContainerType.List)
-            {
-                GUILayout.Space(25);
-                GUILayout.Label("●");
-            }
-            else if (_containerType == ContainerType.NoCheckbox)
-            {
-                GUILayout.Space(25);
-            }
-            else if (_containerType == ContainerType.Checkedbox)
-            {
-                GUILayout.Space(25);
-            }
-            else if (_containerType == ContainerType.DividingLine)
-            {
-                GUILayout.Label(" ");
-            }
-
-            for (int i = 0; i < _block.Count; i++)
-            {
-                _block[i].Draw(skin);
-            }
-
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-
-            if (_containerType == ContainerType.Quote)
-            {
-                Rect rect = GUILayoutUtility.GetLastRect();
-                rect.width = 10;
-                GUI.Box(rect, "");
-            }
-            else if (_containerType == ContainerType.NoCheckbox)
-            {
-                Rect rect = GUILayoutUtility.GetLastRect();
-                rect.x = 5;
-                rect.width = 20;
-                EditorGUI.Toggle(rect, false);
-            }
-            else if (_containerType == ContainerType.Checkedbox)
-            {
-                Rect rect = GUILayoutUtility.GetLastRect();
-                rect.x = 5;
-                rect.width = 20;
-                EditorGUI.Toggle(rect, true);
-            }
-            else if (_containerType == ContainerType.DividingLine)
-            {
-                Rect rect = GUILayoutUtility.GetLastRect();
-                rect.height = 2;
-                GUI.Box(rect, "");
-            }
-            else if (_containerType == ContainerType.Fragment)
-            {
-                Rect rect = GUILayoutUtility.GetLastRect();
-                rect.x = rect.width - 16;
-                rect.y = rect.y;
-                rect.width = 20;
-                rect.height = 20;
-                if (GUI.Button(rect, _copyGC, EditorStyles.iconButton))
+                for (int i = 0; i < _block.Count; i++)
                 {
-                    GUIUtility.systemCopyBuffer = _block.Count > 0 ? _block[0].Text : null;
+                    _block[i].Draw(skin);
+                }
+
+                GUILayout.EndVertical();
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(_style)) GUILayout.BeginHorizontal();
+                else GUILayout.BeginHorizontal(_style);
+
+                if (_containerType == ContainerType.Quote)
+                {
+                    GUILayout.Space(10);
+                }
+                else if (_containerType == ContainerType.List)
+                {
+                    GUILayout.Space(25);
+                    GUILayout.Label("●");
+                }
+                else if (_containerType == ContainerType.NoCheckbox)
+                {
+                    GUILayout.Space(25);
+                }
+                else if (_containerType == ContainerType.Checkedbox)
+                {
+                    GUILayout.Space(25);
+                }
+                else if (_containerType == ContainerType.DividingLine)
+                {
+                    GUILayout.Label(" ");
+                }
+
+                for (int i = 0; i < _block.Count; i++)
+                {
+                    _block[i].Draw(skin);
+                }
+
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
+
+                if (_containerType == ContainerType.Quote)
+                {
+                    Rect rect = GUILayoutUtility.GetLastRect();
+                    rect.width = 10;
+                    GUI.Box(rect, "");
+                }
+                else if (_containerType == ContainerType.NoCheckbox)
+                {
+                    Rect rect = GUILayoutUtility.GetLastRect();
+                    rect.x = 5;
+                    rect.width = 20;
+                    EditorGUI.Toggle(rect, false);
+                }
+                else if (_containerType == ContainerType.Checkedbox)
+                {
+                    Rect rect = GUILayoutUtility.GetLastRect();
+                    rect.x = 5;
+                    rect.width = 20;
+                    EditorGUI.Toggle(rect, true);
+                }
+                else if (_containerType == ContainerType.DividingLine)
+                {
+                    Rect rect = GUILayoutUtility.GetLastRect();
+                    rect.height = 2;
+                    GUI.Box(rect, "");
+                }
+                else if (_containerType == ContainerType.Fragment)
+                {
+                    Rect rect = GUILayoutUtility.GetLastRect();
+                    rect.x = rect.width - 16;
+                    rect.y = rect.y;
+                    rect.width = 20;
+                    rect.height = 20;
+                    if (GUI.Button(rect, _copyGC, EditorStyles.iconButton))
+                    {
+                        GUIUtility.systemCopyBuffer = _block.Count > 0 ? _block[0].Text : null;
+                    }
                 }
             }
 
@@ -271,6 +292,10 @@ namespace HT.ModuleManager.Markdown
         /// <summary>
         /// 片段 [```]
         /// </summary>
-        Fragment
+        Fragment,
+        /// <summary>
+        /// 表格 [|---|]
+        /// </summary>
+        Table
     }
 }
