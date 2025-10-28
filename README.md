@@ -10,7 +10,11 @@ Unity的模块管理器，用于管理项目中的所有模块（Git存储库）
 
 ## 使用教程
 
-- [Unity Module Manager 模块管理器](https://wanderer.blog.csdn.net/article/details/109488065)。
+- [HTModuleManager（一）模块管理器](https://wanderer.blog.csdn.net/article/details/109488065)。
+
+- [HTModuleManager（二）Markdown轻量级解析库：基础语法](https://wanderer.blog.csdn.net/article/details/139007377)。
+
+- [HTModuleManager（三）Markdown轻量级解析库：Unity编辑器方言](https://wanderer.blog.csdn.net/article/details/154007361)。
 
 ## 使用方法
 

@@ -200,7 +200,7 @@ namespace HT.ModuleManager
             }
             if (GUILayout.Button(_helpGC, "IconButton"))
             {
-                Application.OpenURL("https://wanderer.blog.csdn.net/article/details/109488065");
+                Application.OpenURL("https://blog.csdn.net/qq992817263/category_13074269.html");
             }
             GUILayout.EndHorizontal();
         }
