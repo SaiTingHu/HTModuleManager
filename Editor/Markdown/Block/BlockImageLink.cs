@@ -42,7 +42,9 @@ namespace HT.ModuleManager.Markdown
             if (_isLoadFail && Container.Document.IsHideLoadFailImage)
                 return;
 
-            GUILayout.Label(_texture);
+            float width = Mathf.Min(EditorGUIUtility.currentViewWidth - 10, _texture.width);
+            float height = width * ((float)_texture.height / _texture.width);
+            GUILayout.Label(_texture, GUILayout.Width(width), GUILayout.Height(height));
             Rect rect = GUILayoutUtility.GetLastRect();
             EditorGUIUtility.AddCursorRect(rect, MouseCursor.Link);
             if (GUI.Button(rect, _gc, "Label"))
