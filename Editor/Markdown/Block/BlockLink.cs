@@ -31,7 +31,18 @@ namespace HT.ModuleManager.Markdown
             GUI.contentColor = Container.Document.LinkColor;
             if (GUILayout.Button(_gc, "Label"))
             {
-                Application.OpenURL(Url);
+                if (Url.StartsWith("Assets/"))
+                {
+                    Object obj = AssetDatabase.LoadAssetAtPath<Object>(Url);
+                    if (obj != null)
+                    {
+                        EditorGUIUtility.PingObject(obj);
+                    }
+                }
+                else
+                {
+                    Application.OpenURL(Url);
+                }
             }
             Rect rect = GUILayoutUtility.GetLastRect();
             EditorGUIUtility.AddCursorRect(rect, MouseCursor.Link);
