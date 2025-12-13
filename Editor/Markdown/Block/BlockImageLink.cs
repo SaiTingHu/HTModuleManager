@@ -11,6 +11,7 @@ namespace HT.ModuleManager.Markdown
         private Texture2D _texture;
         private bool _isLoad;
         private bool _isLoadFail;
+        private Object _object;
         private GUIContent _gc;
 
         /// <summary>
@@ -21,6 +22,10 @@ namespace HT.ModuleManager.Markdown
         /// 链接
         /// </summary>
         public string Url { get; private set; }
+        /// <summary>
+        /// 是否为资产链接
+        /// </summary>
+        public bool IsAssetsUrl { get; private set; }
 
         public BlockImageLink(string text, string path, string url) : base(text)
         {
@@ -30,6 +35,12 @@ namespace HT.ModuleManager.Markdown
 
             Path = path;
             Url = url;
+            IsAssetsUrl = Url.StartsWith("Assets/");
+
+            if (IsAssetsUrl)
+            {
+                _object = AssetDatabase.LoadAssetAtPath<Object>(Url);
+            }
         }
 
         /// <summary>
@@ -49,7 +60,14 @@ namespace HT.ModuleManager.Markdown
             EditorGUIUtility.AddCursorRect(rect, MouseCursor.Link);
             if (GUI.Button(rect, _gc, "Label"))
             {
-                Application.OpenURL(Url);
+                if (IsAssetsUrl)
+                {
+                    if (_object != null) EditorGUIUtility.PingObject(_object);
+                }
+                else
+                {
+                    Application.OpenURL(Url);
+                }
             }
         }
 
