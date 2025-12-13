@@ -26,6 +26,10 @@ namespace HT.ModuleManager.Markdown
         /// 自定义块颜色
         /// </summary>
         public readonly Color CustomColor = new Color(0f, 1f, 1f, 1f);
+        /// <summary>
+        /// 错误块颜色
+        /// </summary>
+        public readonly Color ErrorColor = new Color(1, 0, 0, 1);
 
         private List<MarkdownContainer> _containers;
         private Vector2 _scroll;

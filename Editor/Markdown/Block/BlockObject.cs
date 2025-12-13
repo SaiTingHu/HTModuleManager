@@ -21,7 +21,7 @@ namespace HT.ModuleManager.Markdown
         {
             _object = AssetDatabase.LoadAssetAtPath<Object>(url);
             _icon = _object != null ? EditorGUIUtility.ObjectContent(_object, typeof(Object)).image : null;
-            _gc = _object != null ? new GUIContent(_object.name, url) : GUIContent.none;
+            _gc = new GUIContent(_object != null ? _object.name : "Missing Object", url);
 
             Url = url;
         }
@@ -47,8 +47,8 @@ namespace HT.ModuleManager.Markdown
             else
             {
                 Color color = GUI.contentColor;
-                GUI.contentColor = Container.Document.ObjectColor;
-                GUILayout.Label("Missing Object");
+                GUI.contentColor = Container.Document.ErrorColor;
+                GUILayout.Label(_gc);
                 GUI.contentColor = color;
             }
         }
