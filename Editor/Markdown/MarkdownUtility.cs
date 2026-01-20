@@ -354,7 +354,8 @@ namespace HT.ModuleManager.Markdown
                 bool isFragment = false;
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    string line = lines[i].Trim();
+                    string rawLine = lines[i];
+                    string line = rawLine.Trim();
                     if (isFragment)
                     {
                         if (line.StartsWith("```"))
@@ -366,7 +367,7 @@ namespace HT.ModuleManager.Markdown
                         }
                         else
                         {
-                            builder.Append(line);
+                            builder.Append(rawLine);
                             builder.Append('\n');
                         }
                     }
