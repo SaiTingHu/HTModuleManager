@@ -385,6 +385,7 @@ namespace HT.ModuleManager.Markdown
                                 tableLines.Clear();
                             }
                             isFragment = true;
+                            builder.Append('\n');
                         }
                         else
                         {

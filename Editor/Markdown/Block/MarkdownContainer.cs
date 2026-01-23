@@ -220,7 +220,7 @@ namespace HT.ModuleManager.Markdown
                 else if (_containerType == ContainerType.Fragment)
                 {
                     Rect rect = GUILayoutUtility.GetLastRect();
-                    rect.x = rect.width - 16;
+                    rect.x = 5;
                     rect.y = rect.y;
                     rect.width = 20;
                     rect.height = 20;
