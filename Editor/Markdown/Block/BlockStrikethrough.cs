@@ -17,15 +17,18 @@ namespace HT.ModuleManager.Markdown
         /// </summary>
         public override void Draw(GUISkin skin)
         {
+            Color color = GUI.color;
+            GUI.color = Color.gray;
             GUILayout.Label(Text);
+            GUI.color = color;
 
             GUI.skin = null;
 
             Rect rect = GUILayoutUtility.GetLastRect();
             rect.y += (rect.height * 0.5f - 1);
-            rect.height = 2f;
+            rect.height = 1.5f;
 
-            Color color = GUI.color;
+            color = GUI.color;
             GUI.color = Color.yellow;
             GUI.Box(rect, "", "WhiteBackground");
             GUI.color = color;
