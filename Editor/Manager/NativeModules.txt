@@ -5,10 +5,10 @@ HTFrameworkAIAgent|https://github.com/SaiTingHu/HTFrameworkAIAgent.git
 HTFrameworkDeployment|https://github.com/SaiTingHu/HTFrameworkDeployment.git
 HTFrameworkGameComponent|https://github.com/SaiTingHu/HTFrameworkGameComponent.git
 HTFrameworkDemo|https://github.com/SaiTingHu/HTFrameworkDemo.git
-Plugins/HT/HTEditorTool|https://github.com/SaiTingHu/HTEditorTool.git
-Plugins/HT/PostProcessing|https://github.com/SaiTingHu/PostProcessing.git
-Plugins/HT/ProtobufNet|https://github.com/SaiTingHu/ProtobufNet.git
-Plugins/HT/SpecialEffects|https://github.com/SaiTingHu/SpecialEffects.git
-Plugins/HT/InfiniteList|https://github.com/SaiTingHu/InfiniteList.git
-Plugins/HT/TextureProcessor|https://github.com/SaiTingHu/TextureProcessor.git
-Plugins/HT/TextureShop|https://github.com/SaiTingHu/TextureShop.git
+HTModules/HTEditorTool|https://github.com/SaiTingHu/HTEditorTool.git
+HTModules/InfiniteList|https://github.com/SaiTingHu/InfiniteList.git
+HTModules/PostProcessing|https://github.com/SaiTingHu/PostProcessing.git
+HTModules/ProtobufNet|https://github.com/SaiTingHu/ProtobufNet.git
+HTModules/SpecialEffects|https://github.com/SaiTingHu/SpecialEffects.git
+HTModules/TextureProcessor|https://github.com/SaiTingHu/TextureProcessor.git
+HTModules/TextureShop|https://github.com/SaiTingHu/TextureShop.git

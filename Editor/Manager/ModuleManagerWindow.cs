@@ -217,12 +217,15 @@ namespace HT.ModuleManager
             {
                 if (ModuleIsShow(_modulesLibrary.Modules[i]))
                 {
-                    if (CurrentModule == _modulesLibrary.Modules[i]) GUILayout.BeginHorizontal("InsertionMarker");
-                    else GUILayout.BeginHorizontal();
+                    GUI.backgroundColor = CurrentModule == _modulesLibrary.Modules[i] ? Color.yellow : Color.clear;
+                    GUI.color = CurrentModule == _modulesLibrary.Modules[i] ? Color.yellow : Color.white;
+
+                    GUILayout.BeginHorizontal("SelectionRect");
 
                     GUIContent gc = _modulesLibrary.Modules[i].IsLocalExist ? _moduleGC : _noneModuleGC;
                     gc.text = _modulesLibrary.Modules[i].Name;
-                    if (GUILayout.Button(gc, EditorStyles.label, GUILayout.MinWidth(180), GUILayout.Height(24)))
+                    GUIStyle gs = CurrentModule == _modulesLibrary.Modules[i] ? EditorStyles.boldLabel : EditorStyles.label;
+                    if (GUILayout.Button(gc, gs, GUILayout.MinWidth(180), GUILayout.Height(24)))
                     {
                         if (CurrentModule == _modulesLibrary.Modules[i])
                         {
@@ -234,6 +237,9 @@ namespace HT.ModuleManager
                         }
                         GUI.FocusControl(null);
                     }
+
+                    GUI.backgroundColor = Color.white;
+                    GUI.color = Color.white;
 
                     GUILayout.FlexibleSpace();
 
